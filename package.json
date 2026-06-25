@@ -1,0 +1,24 @@
+{
+  "name": "islam-agent-worker",
+  "version": "2.0.0",
+  "description": "Cloudflare Worker pour Islam Agent Épistémique - Base de connaissances islamique",
+  "main": "index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "test": "echo \"No tests specified\""
+  },
+  "keywords": [
+    "cloudflare",
+    "worker",
+    "islam",
+    "epistemique",
+    "knowledge-base"
+  ],
+  "author": "Islam Agent Épistémique",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
