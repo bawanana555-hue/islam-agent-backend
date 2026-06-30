@@ -6,7 +6,18 @@
 // - Hadiths authentiques (Bukhari, Muslim, etc.)
 // - Tafsir Ibn Kathir
 // ============================================================
+const express = require('express');
+const cors = require('cors'); // Installez-le si ce n'est pas fait
+const app = express();
 
+// Autoriser votre interface QuickEdit à interroger le serveur
+app.use(cors({
+    origin: 'http://localhost:2435' 
+}));
+
+// Le reste de votre code...
+const PORT = 3000;
+app.listen(PORT, () => console.log(`Serveur MCP sur le port ${PORT}`));
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
