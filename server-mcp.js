@@ -6,7 +6,31 @@
 // - Hadiths authentiques (Bukhari, Muslim, etc.)
 // - Tafsir Ibn Kathir
 // ============================================================
+const express = require('express'); 
 
+const cors = require('cors'); 
+
+const app = express(); 
+
+// Configuration CORS complète pour éviter le blocage du navigateur 
+
+app.use(cors({ 
+
+origin: 'http://localhost:2435', 
+
+methods: ['GET', 'POST', 'OPTIONS'], 
+
+allowedHeaders: ['Content-Type', 'Authorization'] 
+
+})); 
+
+app.use(express.json()); 
+
+// Votre logique serveur MCP ici 
+
+const PORT = 3000; 
+
+app.listen(PORT, () => console.log(`Serveur MCP sur le port ${PORT}`));
 // ============================================================
 // 1. CHARGEMENT DES DONNÉES
 // ============================================================
