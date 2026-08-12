@@ -1,7 +1,7 @@
 'use strict';
 
 // ============================================================
-// BASE DE DONNÉES ISLAMIQUE COMPLÈTE
+// BASE DE DONNÉES ISLAMIQUE COMPLÈTE (Voici le module :('/data/data/com.termux/files/home/server-mcp.js/')
 // Sources : Coran (traduction française Hamidullah),
 //           Hadiths authentiques (Sahih Bukhari, Muslim, etc.)
 //           Tafsir Ibn Kathir (résumé)
