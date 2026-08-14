@@ -1011,7 +1011,28 @@
                     .then(r => r.ok ? addMessage('✅ Serveur MCP connecté.', 'bot') : null)
                     .catch(() => {});
             }
+<script>
+  // 1. Initialisation de la connexion avec vos identifiants Supabase
+  const SUPABASE_URL = 'https://VOTRE_PROJET.supabase.co';
+  const SUPABASE_KEY = 'VOTRE_CLE_ANON_PUBLIQUE';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  // 2. Fonction pour lire les données dans votre table
+  async function lireDonnees() {
+    // Remplacez 'ma_table' par le nom exact de votre table créée sur Supabase
+    const { data, error } = await db.from('ma_table').select('*');
+
+    if (error) {
+      console.error('Erreur :', error.message);
+    } else {
+      console.log('Résultats de la base de données :', data);
+      alert('Connexion réussie ! Données reçues : ' + JSON.stringify(data));
+    }
+  }
+
+  // 3. Exécuter la fonction
+  lireDonnees();
+</script>
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
             else init();
 
