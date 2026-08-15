@@ -1,0 +1,7 @@
+mon-projet/
+├── .git/
+├── .gitignore          ← s'applique à tout le projet
+├── src/
+│   ├── .gitignore      ← s'applique uniquement à src/
+│   └── ...
+└── README.md
