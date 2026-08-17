@@ -43,7 +43,7 @@
 
     // Déclenche l'événement pour compatibilité avec le code existant
     loadIslamData()
-        ..then(function () {
+        .then(function () {
             document.dispatchEvent(new Event('islamDataReady'));
         })
         .catch(function (err) {
