@@ -1,0 +1,10 @@
+{
+  "name": "islam-agent-epistemique",
+  "version": "1.0.0",
+  "description": "Islam Agent Épistémique - serveur Node.js local",
+  "main": "server-mcp.js",
+  "scripts": {
+    "start": "node server-mcp.js",
+    "dev": "node server-mcp.js"
+  }
+}
