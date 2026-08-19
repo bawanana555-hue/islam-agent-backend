@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "titre": "Les cinq piliers de l'Islam",
+    "categorie": "Fondamentaux",
+    "contenu": "Les piliers de l'Islam sont au nombre de cinq : 1) La profession de foi (Chahada), 2) La prière (Salat), 3) L'aumône légale (Zakat), 4) Le jeûne du mois de Ramadan (Sawm), et 5) Le pèlerinage à La Mecque (Hajj) pour celui qui en a les moyens.",
+    "mots_cles": ["piliers", "chahada", "salat", "zakat", "ramadan", "hajj", "fondements"]
+  },
+  {
+    "id": 2,
+    "titre": "La prière quotidienne (Salat)",
+    "categorie": "Pratique religieuse",
+    "contenu": "La prière est le deuxième pilier de l'Islam. Elle s'effectue 5 fois par jour : Fajr (aube), Dhuhr (midi), Asr (après-midi), Maghrib (coucher du soleil) et Isha (nuit). L'ablution (Wudu) est une condition obligatoire avant la prière.",
+    "mots_cles": ["prière", "salat", "fajr", "dhuhr", "asr", "maghrib", "isha", "ablution", "wudu"]
+  },
+  {
+    "id": 3,
+    "titre": "Le Tawhid (L'unicité de Dieu)",
+    "categorie": "Théologie",
+    "contenu": "Le Tawhid est le concept fondamental de la théologie islamique. Il affirme l'unicité absolue d'Allah : Il est Unique, sans associé, sans égal, et n'a pas été engendré.",
+    "mots_cles": ["tawhid", "unicité", "dieu", "allah", "foi", "akida"]
+  },
+  {
+    "id": 4,
+    "titre": "L'Hégire et le calendrier islamique",
+    "categorie": "Histoire",
+    "contenu": "L'Hégire correspond à l'émigration du Prophète Mahomet et de ses compagnons de La Mecque vers Médine en l'an 622. Cet événement marque le début du calendrier hégirien (lunaire).",
+    "mots_cles": ["hégire", "médine", "mecque", "calendrier", "histoire", "émigration"]
+  }
+]
