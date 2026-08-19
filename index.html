@@ -609,7 +609,7 @@
     }
 
     async function appelGemini(prompt, cleApi) {
-        const MODELE = 'gemini-1.5-flash';
+        const MODELE = 'gemini-3.1-flash-lite';
         const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + MODELE + ':generateContent?key=' + encodeURIComponent(cleApi);
         const res = await fetch(url, {
             method: 'POST',
