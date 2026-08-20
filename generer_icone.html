@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Générateur d'Icône TOSSARA</title>
+</head>
+<body style="font-family:sans-serif; text-align:center; padding:20px; background:#f4f4f4;">
+
+    <h2>Générateur d'icône avec texte "TOSSARA"</h2>
+    <p>Cliquez sur le bouton pour télécharger automatiquement votre icône :</p>
+
+    <canvas id="iconCanvas" width="512" height="512" style="border:2px solid #ccc; border-radius:30px; margin:10px;"></canvas>
+    <br>
+    <button onclick="downloadIcon()" style="padding:12px 24px; font-size:16px; background:#27ae60; color:white; border:none; border-radius:20px; cursor:pointer;">
+        📥 Télécharger l'icône (icon-512.png)
+    </button>
+
+    <script>
+        const canvas = document.getElementById('iconCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Fond vert arrondi / dégradé
+        ctx.fillStyle = '#27ae60';
+        ctx.fillRect(0, 0, 512, 512);
+
+        // Dessin d'un symbole (Cercle / Dôme)
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(256, 200, 90, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#27ae60';
+        ctx.beginPath();
+        ctx.arc(280, 190, 75, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Texte "TOSSARA" au centre de l'icône
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 55px "Segoe UI", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('TOSSARA', 256, 360);
+
+        // Sous-texte facultatif
+        ctx.font = 'bold 24px "Segoe UI", sans-serif';
+        ctx.fillStyle = '#f5a623';
+        ctx.fillText('AGENT IA', 256, 400);
+
+        function downloadIcon() {
+            const link = document.createElement('a');
+            link.download = 'icon-512.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
