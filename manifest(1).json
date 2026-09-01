@@ -1,0 +1,29 @@
+{
+  "format": "quran-audio-text",
+  "formatVersion": "1.0.0",
+  "language": "ar",
+  "textPolicy": "uthmani-with-diacritics",
+  "timingUnit": "ms",
+  "alignmentScope": "word",
+  "highlightMode": "current-word",
+  "offsetMs": 0,
+  "reciter": {
+    "id": null,
+    "name": null,
+    "audioSource": null
+  },
+  "alignment": {
+    "status": "to-be-aligned",
+    "method": "forced-alignment-then-human-review",
+    "estimatedValuesAllowed": false
+  },
+  "surahs": [
+    {
+      "number": 1,
+      "slug": "al-fatiha",
+      "audio": "audio/001.mp3",
+      "text": "text/001.json",
+      "captions": "captions/001.vtt"
+    }
+  ]
+}
