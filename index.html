@@ -554,7 +554,7 @@
         .mini-reading-zone { height: 32vh; max-height: 32vh; min-height: 110px; }
         .mini-btn { font-size: 0.68rem; padding: 5px 9px; min-height: 30px; }
         .mini-control-block { gap: 3px; padding: 6px; }
-        .mini-bottom-controls { max-height: 70vh; }
+        .mini-bottom-controls { max-height: 58vh; }
         .btn-oval-selector { font-size: 0.6rem; padding: 3px 6px; }
         .msg-porte-epistemique { font-size: 0.95rem; }
         .msg-japprends { font-size: 0.75rem; }
@@ -725,7 +725,7 @@ window.closeModal = function(id) {
     <input type="text" id="authTitre" class="modal-input" placeholder="Ex: Expert en Théologie Islamique" />
     <span class="modal-label">⚙️ Mode de Connexion IA :</span>
     <div class="mode-selector-profil" id="modeSelectorProfil">
-        <button data-mode="local" class="active">📁 Hors-Ligne</button>
+        <button data-mode="local" class="activer">📁 Hors-Ligne</button>
         <button data-mode="hybrid">🔁 Hybride (MCP + RAG)</button>
         <button data-mode="online">🌐 En Ligne (Gemini IA)</button>
     </div>
@@ -854,7 +854,7 @@ window.closeModal = function(id) {
 
 <!-- ========== MODALE DE SÉLECTION (Sourate / Récitateur) ========== -->
 <div class="modal-overlay" id="miniSelectionModal" style="z-index:400;">
-<div class="modal-box" style="max-height:70vh;">
+<div class="modal-box" style="max-height:90vh;">
     <button class="modal-close" onclick="closeModal('miniSelectionModal')" aria-label="Fermer">&times;</button>
     <h3 id="miniModalTitle" style="color:var(--bleu-ciel); margin-bottom:12px;">Sélectionner</h3>
     <div id="miniModalList" style="display:flex; flex-direction:column; gap:6px; max-height:50vh; overflow-y:auto;"></div>
