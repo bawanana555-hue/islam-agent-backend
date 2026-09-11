@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Convertisseur de Bibliothèque - Mini-Agent Coranique</title>
+ <style>
+ :root {
+ --primary: #1a5f3f;
+ --secondary: #d4af37;
+ --bg: #f5f5f0;
+ --text: #1a1a1a;
+ --card: #ffffff;
+ --border: #e0e0d0;
+ --shadow: 0 2px 8px rgba(0,0,0,0.1);
+ }
+
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+
+ body {
+ font-family: 'Segoe UI', Tahoma, sans-serif;
+ background: var(--bg);
+ color: var(--text);
+ line-height: 1.6;
+ min-height: 100vh;
+ padding: 20px;
+ }
+
+ .container {
+ max-width: 1100px;
+ margin: 0 auto;
+ background: var(--card);
+ border-radius: 12px;
+ box-shadow: var(--shadow);
+ overflow: hidden;
+ }
+
+ header {
+ background: linear-gradient(135deg, var(--primary), #2d8659);
+ color: white;
+ padding: 30px;
+ text-align: center;
+ }
+
+ header h1 { font-size: 2rem; margin-bottom: 8px; }
+ header p { opacity: 0.95; font-size: 0.95rem; }
+
+ .status-bar {
+ background: #e8f5ed;
+ border-left: 4px solid var(--primary);
+ padding: 12px 20px;
+ margin: 20px;
+ border-radius: 6px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ flex-wrap: wrap;
+ gap: 10px;
+ }
+
+ .status-bar .mode-indicator {
+ font-weight: 600;
+ color: var(--primary);
+ }
+
+ .section {
+ padding: 25px;
+ border-bottom: 1px solid var(--border);
+ }
+
+ .section:last-child { border-bottom: none; }
+
+ .section h2 {
+ color: var(--primary);
+ margin-bottom: 15px;
+ font-size: 1.3rem;
+ }
+
+ .mode-selector {
+ display: flex;
+ gap: 15px;
+ flex-wrap: wrap;
+ margin-bottom: 15px;
+ }
+
+ .mode-selector label {
+ display: flex;
+ align-items: center;
+ gap: 6px;
+ cursor: pointer;
+ padding: 8px 14px;
+ background: #f8f8f8;
+ border-radius: 6px;
+ }
+
+ .mode-selector label:hover { background: #e8f5ed; }
+
+ .drop-zone {
+ border: 3px dashed var(--border);
+ border-radius: 12px;
+ padding: 40px 20px;
+ text-align: center;
+ cursor: pointer;
+ transition: all 0.3s;
+ background: #fafafa;
+ margin-bottom: 20px;
+ }
+
+ .drop-zone:hover, .drop-zone.drag-over {
+ border-color: var(--primary);
+ background: #e8f5ed;
+ transform: scale(1.01);
+ }
+
+ .drop-zone .icon {
+ font-size: 3rem;
+ color: var(--primary);
+ margin-bottom: 10px;
+ }
+
+ .drop-zone p { color: #666; margin-top: 8px; }
+
+ .file-list {
+ max-height: 400px;
+ overflow-y: auto;
+ border: 1px solid var(--border);
+ border-radius: 8px;
+ padding: 10px;
+ background: #fafafa;
+ margin-bottom: 15px;
+ }
+
+ .file-item {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ padding: 10px 14px;
+ margin-bottom: 6px;
+ background: white;
+ border-radius: 6px;
+ border: 1px solid #eee;
+ }
+
+ .file-info {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ flex: 1;
+ min-width: 0;
+ }
+
+ .file-icon {
+ width: 36px;
+ height: 36px;
+ border-radius: 6px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ color: white;
+ font-weight: bold;
+ font-size: 0.75rem;
+ flex-shrink: 0;
+ }
+
+ .file-icon.json { background: #f0ad4e; }
+ .file-icon.txt, .file-icon.md { background: #5bc0de; }
+ .file-icon.mp3 { background: #9b59b6; }
+ .file-icon.mp4 { background: #e74c3c; }
+
+ .file-name {
+ font-weight: 500;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ }
+
+ .file-size { color: #888; font-size: 0.85rem; }
+
+ .remove-btn {
+ background: #ff4757;
+ color: white;
+ border: none;
+ border-radius: 4px;
+ padding: 5px 12px;
+ cursor: pointer;
+ font-size: 0.85rem;
+ }
+
+ .remove-btn:hover { background: #ee2d3f; }
+
+ .actions {
+ display: flex;
+ gap: 10px;
+ flex-wrap: wrap;
+ }
+
+ .btn {
+ padding: 12px 24px;
+ border: none;
+ border-radius: 6px;
+ cursor: pointer;
+ font-weight: 600;
+ font-size: 0.95rem;
+ transition: all 0.2s;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ }
+
+ .btn-primary { background: var(--primary); color: white; }
+ .btn-primary:hover { background: #144d33; }
+
+ .btn-secondary { background: var(--secondary); color: white; }
+ .btn-secondary:hover { background: #b8941f; }
+
+ .btn-danger { background: #e74c3c; color: white; }
+ .btn-danger:hover { background: #c0392b; }
+
+ .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+ .library-preview {
+ background: #f9f9f9;
+ border: 1px solid var(--border);
+ border-radius: 8px;
+ padding: 15px;
+ max-height: 300px;
+ overflow-y: auto;
+ font-family: 'Courier New', monospace;
+ font-size: 0.85rem;
+ }
+
+ .preview-item {
+ padding: 6px 10px;
+ margin-bottom: 4px;
+ background: white;
+ border-radius: 4px;
+ border-left: 3px solid var(--primary);
+ }
+
+ .notification {
+ position: fixed;
+ top: 20px;
+ right: 20px;
+ padding: 15px 25px;
+ border-radius: 8px;
+ color: white;
+ font-weight: 500;
+ box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+ transform: translateX(400px);
+ transition: transform 0.3s;
+ z-index: 1000;
+ }
+
+ .notification.show { transform: translateX(0); }
+ .notification.success { background: var(--primary); }
+ .notification.error { background: #e74c3c; }
+ .notification.info { background: #3498db; }
+
+ .stats {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+ gap: 10px;
+ margin-top: 15px;
+ }
+
+ .stat-card {
+ background: #f8f8f8;
+ padding: 12px;
+ border-radius: 6px;
+ text-align: center;
+ }
+
+ .stat-card .value {
+ font-size: 1.5rem;
+ font-weight: bold;
+ color: var(--primary);
+ }
+
+ .stat-card .label {
+ font-size: 0.8rem;
+ color: #666;
+ margin-top: 4px;
+ }
+
+ .empty-state {
+ text-align: center;
+ padding: 30px;
+ color: #999;
+ font-style: italic;
+ }
+
+ .library-grid {
+ display: grid;
+ gap: 10px;
+ grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+ margin-top: 15 .library-grid {
+   display: grid;
+   gap: 10px;
+   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+   margin-top: 15px;
+ }
+
+ .resource-card {
+   background: #fff;
+   border: 1px solid var(--border);
+   border-radius: 8px;
+   padding: 12px;
+   box-shadow: var(--shadow);
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+ }
+
+ .resource-card .title {
+   font-weight: 600;
+   color: var(--primary);
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+ }
+
+ .resource-card .meta {
+   font-size: 0.85rem;
+   color: #666;
+ }
+
+ .resource-card .actions {
+   margin-top: auto;
+   display: flex;
+   gap: 6px;
+ }
+
+ .resource-card button {
+   flex: 1;
+   padding: 6px;
+   font-size: 0.85rem;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+ }
+
+ .resource-card .play-btn { background: #27ae60; color: #fff; }
+ .resource-card .play-btn:hover { background: #1e8449; }
+
+ .resource-card .delete-btn { background: #c0392b; color: #fff; }
+ .resource-card .delete-btn:hover { background: #922b21; }
+
+ .hidden { display: none; }
+ </style>
+</head>
+<body>
+ <div class="container">
+  <header>
+   <h1>📚 Convertisseur de Bibliothèque</h1>
+   <p>Mini-Agent Coranique · Gestionnaire de ressources multimodal</p>
+  </header>
+
+  <div class="status-bar">
+   <span class="mode-indicator" id="modeIndicator">⏳ Initialisation...</span>
+   <span id="statsSummary" style="color:#666;font-size:0.9rem;"></span>
+  </div>
+
+  <div class="section">
+   <h2>⚙️ Mode de stockage</h2>
+   <div class="mode-selector">
+    <label>
+     <input type="radio" name="storageMode" value="auto" checked>
+     <span>🔄 Automatique (détection)</span>
+    </label>
+    <label>
+     <input type="radio" name="storageMode" value="indexeddb">
+     <span>🗄️ Agent principal (IndexedDB)</span>
+    </label>
+    <label>
+     <input type="radio" name="storageMode" value="datajson">
+     <span>📄 Mini-agent (data.json)</span>
+    </label>
+   </div>
+  </div>
+
+  <div class="section">
+   <h2>➕ Ajouter des ressources</h2>
+   <div class="drop-zone" id="dropZone">
+    <div class="drop-zone-icon">📂</div>
+    <p><strong>Glissez-déposez vos fichiers ici</strong></p>
+    <p style="font-size:0.9rem;color:#666;">ou cliquez pour parcourir</p>
+    <p style="font-size:0.8rem;color:#999;margin-top:10px;">
+     Formats supportés : .txt, .md, .json, .mp3, .mp4
+    </p>
+    <input type="file" id="fileInput" multiple accept=".txt,.md,.json,.mp3,.mp4" style="display:none;">
+   </div>
+
+   <div id="fileList" style="margin-top:15px;"></div>
+  </div>
+
+  <div class="section">
+   <h2>🔍 Rechercher dans la bibliothèque</h2>
+   <input type="text" id="searchInput" placeholder="Titre, type, catégorie..." style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:1rem;">
+  </div>
+
+  <div class="section">
+   <h2>📊 Statistiques</h2>
+   <div class="stats-grid" id="statsGrid">
+    <div class="empty-state">Chargement des statistiques...</div>
+   </div>
+  </div>
+
+  <div class="section">
+    <h2>📚 Bibliothèque</h2>
+   <div id="library" style="display:grid;gap:10px;">
+    <div class="empty-state">Aucune ressource pour le moment</div>
+   </div>
+  </div>
+
+  <div class="section">
+   <h2>🔧 Actions globales</h2>
+   <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <button class="btn btn-primary" onclick="exportData()">💾 Exporter data.json</button>
+    <button class="btn btn-warning" onclick="document.getElementById('importInput').click()">📥 Importer data.json</button>
+    <input type="file" id="importInput" accept=".json" style="display:none;" onchange="importData(event)">
+    <button class="btn btn-danger" onclick="clearLibrary()">🗑️ Vider la bibliothèque</button>
+   </div>
+  </div>
+ </div>
+
+ <script>
+ // ============================================
+ // COUCHE D'ABSTRACTION DE STOCKAGE
+ // ============================================
+
+ const StorageAdapter = {
+ mode: null,
+ db: null,
+ cache: null,
+
+ async init() {
+ const isPrincipal = window.location.pathname.includes('principal')
+ || window.location.search.includes('mode=principal')
+ || localStorage.getItem('preferredMode') === 'indexeddb';
+
+ const savedMode = localStorage.getItem('preferredMode');
+
+ if (savedMode === 'indexeddb') {
+ this.mode = 'indexeddb';
+ await this.initIndexedDB();
+ } else if (savedMode === 'datajson') {
+ this.mode = 'datajson';
+ await this.initDataJSON();
+ } else {
+ this.mode = isPrincipal ? 'indexeddb' : 'datajson';
+ if (this.mode === 'indexeddb') {
+ await this.initIndexedDB();
+ } else {
+ await this.initDataJSON();
+ }
+ }
+
+ this.updateModeIndicator();
+ },
+
+ async initIndexedDB() {
+ return new Promise((resolve, reject) => {
+ if (typeof indexedDB === 'undefined') {
+ reject('IndexedDB non disponible');
+ return;
+ }
+
+ const request = indexedDB.open('biblio', 1);
+
+ request.onupgradeneeded = e => {
+ const db = e.target.result;
+ if (!db.objectStoreNames.contains('resources')) {
+ db.createObjectStore('resources', { keyPath: 'id' });
+ }
+ if (!db.objectStoreNames.contains('audio')) {
+ db.createObjectStore('audio', { keyPath: 'id' });
+ }
+ if (!db.objectStoreNames.contains('video')) {
+ db.createObjectStore('video', { keyPath: 'id' });
+ }
+ };
+
+ request.onsuccess = e => {
+ this.db = e.target.result;
+ resolve();
+ };
+
+ request.onerror = e => reject(e.target.error);
+ });
+ },
+
+ async initDataJSON() {
+ try {
+ const response = await fetch('data.json');
+ if (response.ok) {
+ const data = await response.json();
+ this.cache = data.resources || [];
+ }
+ } catch (e) {
+ this.cache = this.loadFromLocalStorage();
+ }
+ },
+
+ loadFromLocalStorage() {
+ try {
+ const stored = localStorage.getItem('biblio_cache');
+ return stored ? JSON.parse(stored) : [];
+ } catch (e) {
+ return [];
+ }
+ },
+
+ saveToLocalStorage(data) {
+ localStorage.setItem('biblio_cache', JSON.stringify(data));
+ },
+
+ async getAll() {
+ if (this.mode === 'indexeddb' && this.db) {
+ return new Promise((resolve, reject) => {
+ const tx = this.db.transaction('resources', 'readonly');
+ const store = tx.objectStore('resources');
+ const req = store.getAll();
+ req.onsuccess = () => resolve(req.result || []);
+ req.onerror = () => reject(req.error);
+ });
+ }
+ return this.cache || [];
+ },
+
+ async add(resource) {
+ if (this.mode === 'indexeddb' && this.db) {
+ return new Promise((resolve, reject) => {
+ const tx = this.db.transaction(['resources', 'audio', 'video'], 'readwrite');
+ const resStore = tx.objectStore('resources');
+ resStore.put(resource);
+
+ if (resource.type === 'audio' && resource.blob) {
+ tx.objectStore('audio').put({ id: resource.id, blob: resource.blob });
+ } else if (resource.type === 'video' && resource.blob) {
+ tx.objectStore('video').put({ id: resource.id, blob: resource.blob });
+ }
+
+ tx.oncomplete = () => resolve(resource);
+ tx.onerror = () => reject(tx.error);
+ });
+ }
+
+ // Mode data.json
+ this.cache = this.cache || [];
+ const exists = this.cache.findIndex(r => r.id === resource.id);
+ if (exists >= 0) {
+ this.cache[exists] = resource;
+ } else {
+ this.cache.push(resource);
+ }
+ this.saveToLocalStorage(this.cache);
+ await this.exportToFile();
+ return resource;
+ },
+
+ async delete(id) {
+ if (this.mode === 'indexeddb' && this.db) {
+ return new Promise((resolve, reject) => {
+ const tx = this.db.transaction(['resources', 'audio', 'video'], 'readwrite');
+ tx.objectStore('resources').delete(id);
+ tx.objectStore('audio').delete(id);
+ tx.objectStore('video').delete(id);
+ tx.oncomplete = () => resolve();
+ tx.onerror = () => reject(tx.error);
+ });
+ }
+
+ this.cache = (this.cache || []).filter(r => r.id !== id);
+ this.saveToLocalStorage(this.cache);
+ await this.exportToFile();
+ },
+
+ async clear() {
+ if (this.mode === 'indexeddb' && this.db) {
+ return new Promise((resolve, reject) => {
+ const tx = this.db.transaction(['resources', 'audio', 'video'], 'readwrite');
+ tx.objectStore('resources').clear();
+ tx.objectStore('audio').clear();
+ tx.objectStore('video').clear();
+ tx.oncomplete = () => resolve();
+ tx.onerror = () => reject(tx.error);
+ });
+ }
+
+ this.cache = [];
+ this.saveToLocalStorage(this.cache);
+ await this.exportToFile();
+ },
+
+ async exportToFile() {
+ // Tente d'écrire data.json via téléchargement (le navigateur ne peut pas écrire sur le serveur)
+ // L'utilisateur devra placer ce fichier dans son projet
+ const data = {
+ version: '1.0',
+ lastUpdate: new Date().toISOString(),
+ resources: this.cache || []
+ };
+
+ const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+ const url = URL.createObjectURL(blob);
+
+ // Stocker en mémoire pour téléchargement
+ this.exportUrl = url;
+ this.exportData = data;
+ },
+
+ updateModeIndicator() {
+ const indicator = document.getElementById('modeIndicator');
+ const stats = document.getElementById('statsSummary');
+ if (!indicator) return;
+
+ if (this.mode === 'indexeddb') {
+ indicator.textContent = '🗄️ Mode : Agent principal (IndexedDB)';
+ stats.textContent = 'Stockage local persistant';
+ } else {
+ indicator.textContent = '📄 Mode : Mini-agent (data.json)';
+ stats.textContent = 'Stockage via fichier data.json';
+ }
+ }
+ };
+
+ // ============================================
+ // APPLICATION
+ // ============================================
+
+ let state = {
+ resources: [],
+ searchQuery: ''
+ };
+
+ const STORAGE_KEY = 'biblio_resources';
+
+ function uid() {
+ return 'res_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+ }
+
+ function detectType(filename) {
+ const ext = filename.split('.').pop().toLowerCase();
+ const map = {
+ 'txt': 'text',
+ 'md': 'text',
+ 'json': 'text',
+ 'mp3': 'audio',
+ 'mp4': 'video'
+ };
+ return map[ext] || 'unknown';
+ }
+
+ function getFileIcon(type) {
+ const map = {
+ 'json': 'json',
+ 'txt': 'txt',
+ 'md': 'md',
+ 'mp3': 'mp3',
+ 'mp4': 'mp4'
+ };
+ return map[type] || 'txt';
+ }
+
+ function formatSize(bytes) {
+ if (bytes < 1024) return bytes + ' B';
+ if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+ return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+ }
+
+ function showNotification(message, type = 'success') {
+ const notif = document.createElement('div');
+ notif.className = `notification ${type}`;
+ notif.textContent = message;
+ document.body.appendChild(notif);
+ setTimeout(() => notif.classList.add('show'), 10);
+ setTimeout(() => {
+ notif.classList.remove('show');
+ setTimeout(() => notif.remove(), 300);
+ }, 3000);
+ }
+
+ // ============================================
+ // GESTION DES FICHIERS
+ // ============================================
+
+ let pendingFiles = [];
+
+ const dropZone = document.getElementById('dropZone');
+ const fileInput = document.getElementById('fileInput');
+
+ dropZone.addEventListener('click', () => fileInput.click());
+
+ dropZone.addEventListener('dragover', e => {
+ e.preventDefault();
+ dropZone.classList.add('drag-over');
+ });
+
+ dropZone.addEventListener('dragleave', () => {
+ dropZone.classList.remove('drag-over');
+ });
+
+ dropZone.addEventListener('drop', e => {
+ e.preventDefault();
+ dropZone.classList.remove('drag-over');
+ handleFiles(e.dataTransfer.files);
+ });
+
+ fileInput.addEventListener('change', e => {
+ handleFiles(e.target.files);
+});
+
+});
+
+function handleFiles(file)List) {
+  const files = Array.from(fileList);
+  files.forEach(file => {
+    const id = crypto.randomUUID();
+    const type = file.type.startsWith('audio') ? 'audio' :
+                 file.type.startsWith('video') ? 'video' :
+                 file.name.endsWith('.json') ? 'json' :
+                 file.name.endsWith('.md') ? 'md' :
+                 file.name.endsWith('.txt') ? 'txt' :
+                 'other';
+    const size = file.size;
+    const name = file.name;
+    const item = { id, name, type, size, file };
+    pendingFiles.push(item);
+  });
+  renderFileList();
+}
+
+// ============================================
+// RENDER LISTE DE FICHIERS EN ATTENTE
+// ============================================
+
+function renderFileList() {
+  const container = document.getElementById('fileList');
+  container.innerHTML = '';
+  if (pendingFiles.length === 0) {
+    container.innerHTML = '<p class="empty-state">Aucun fichier sélectionné</p>';
+    return;
+  }
+  const list = document.createElement('div');
+  list.className = 'file-list';
+  pendingFiles.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'file-item';
+    const info = document.createElement('div');
+    info.className = 'file-info';
+    const icon = document.createElement('div');
+    icon.className = `file-icon ${item.type}`;
+    icon.textContent = item.type.charAt(0).toUpperCase();
+    const name = document.createElement('span');
+    name.className = 'file-name';
+    name.textContent = item.name;
+    const size = document.createElement('span');
+    size.className = 'file-size';
+    size.textContent = formatBytes(item.size);
+    info.appendChild(icon);
+    info.appendChild(name);
+    info.appendChild(size);
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-btn';
+    removeBtn.textContent = '✕';
+    removeBtn.onclick = () => {
+      pendingFiles = pendingFiles.filter(f => f.id !== item.id);
+      renderFileList();
+    };
+    div.appendChild(info);
+    div.appendChild(removeBtn);
+    list.appendChild(div);
+  });
+  container.appendChild(list);
+}
+
+// ============================================
+// IMPORT/EXPORT ET GESTION DE LA BIBLIOTHÈQUE
+// ============================================
+
+async function exportData() {
+  const resources = await StorageAdapter.getAllResources();
+  const blob = new Blob([JSON.stringify(resources, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'data.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showNotification('Export terminé', 'success');
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      await StorageAdapter.clearAll();
+      for (const item of data) {
+        await StorageAdapter.saveResource(item);
+      }
+      renderLibrary();
+      updateStats();
+      showNotification('Import réussi', 'success');
+    } catch (err) {
+      console.error(err);
+      showNotification('Échec de l\'import', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ============================================
+// GESTION DE LA BIBLIOTHÈQUE VISUELLE
+// ============================================
+
+async function renderLibrary() {
+  const lib = document.getElementById('library');
+  lib.innerHTML = '';
+  const resources = await StorageAdapter.getAllResources();
+  if (resources.length === 0) {
+    lib.innerHTML = '<p class="empty-state">Aucune ressource pour le moment</p>';
+    return;
+  }
+  resources.forEach(res => {
+    const div = document.createElement('div');
+    div.className = 'preview-item';
+    div.textContent = `${res.name} (${res.type})`;
+    lib.appendChild(div);
+  });
+}
+
+// ============================================
+// STATISTIQUES
+// ============================================
+
+async function updateStats() {
+  const statsGrid = document.getElementById('statsGrid');
+  const resources = await StorageAdapter.getAllResources();
+  const total = resources.length;
+  const totalSize = resources.reduce((sum, r) => sum + (r.size || 0), 0);
+  const types = resources.reduce((acc, r) => {
+    acc[r.type] = (acc[r.type] || 0) + 1;
+    return acc;
+  }, {});
+  statsGrid.innerHTML = `
+    <div class="stat-card"><div class="value">${total}</div><div class="label">Ressources</div></div>
+    <div class="stat-card"><div class="value">${formatBytes(totalSize)}</div><div class="label">Taille totale</div></div>
+    ${Object.entries(types).map(([t, c]) => `
+      <div class="stat-card"><div class="value">${c}</div><div class="label">${t}</div></div>
+    `).join('')}
+  `;
+}
+
+// ============================================
+// VIDER LA BIBLIOTHÈQUE
+// ============================================
+
+async function clearLibrary() {
+  if (!confirm('Êtes‑vous sûr de vouloir vider la bibliothèque ?')) return;
+  await StorageAdapter.clearAll();
+  renderLibrary();
+  updateStats();
+  showNotification('Bibliothèque vidée', 'info');
+}
+
+// ============================================
+// INDICATEUR DE MODE
+// ============================================
+
+function updateModeIndicator() {
+  const indicator = document.getElementById('modeIndicator');
+  const mode = StorageAdapter.mode;
+  const text = mode === 'indexeddb' ? '🗄️ Mode IndexedDB (principal)' :
+               mode === 'datajson' ? '📄 Mode data.json (mini‑agent)' :
+               '⏳ Détection…';
+  indicator.textContent = text;
+}
+
+// ============================================
+// INITIALISATION
+// ============================================
+
+document.querySelectorAll('input[name="storageMode"]').forEach(radio => {
+  radio.addEventListener('change', async e => {
+    const chosen = e.target.value;
+    localStorage.setItem('preferredMode', chosen);
+    await StorageAdapter.init();
+    await renderLibrary();
+    await updateStats();
+  });
+});
+
+(async () => {
+  await StorageAdapter.init();
+  await renderLibrary();
+  await updateStats();
+})();
+
+// ============================================
+// RECHERCHE
+// ============================================
+
+document.getElementById('searchInput').addEventListener('input', async e => {
+  const query = e.target.value.toLowerCase();
+  const lib = document.getElementById('library');
+  const resources = await StorageAdapter.getAllResources();
+  const filtered = resources.filter(r => r.name.toLowerCase().includes(query) || r.type.toLowerCase().includes(query));
+  lib.innerHTML = '';
+  if (filtered.length === 0) {
+    lib.innerHTML = '<p class="empty-state">Aucun résultat trouvé</p>';
+    return;
+  }
+  filtered.forEach(res => {
+    const div = document.createElement('div');
+    div.className = 'preview-item';
+    div.textContent = `${res.name} (${res.type})`;
+    lib.appendChild(div);
+  });
+});
+</script>
+</body>
+</html>
