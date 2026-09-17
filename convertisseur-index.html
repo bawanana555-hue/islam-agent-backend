@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Mini-Convertisseur · Tossara</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<style>
+:root {
+  --bg:       #0b0f1a;
+  --surface:  #111827;
+  --panel:    #1a2235;
+  --card:     #1e2a40;
+  --border:   #2a3a55;
+  --bleu:     #4f8ef7;
+  --bleu2:    #87CEEB;
+  --jaune:    #f5c842;
+  --jaune2:   #e8a44a;
+  --vert:     #34c48b;
+  --vert2:    #27ae60;
+  --text:     #d4e0f5;
+  --muted:    #5a7090;
+  --danger:   #e05c5c;
+  --radius:   12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);min-height:100vh;color:var(--text);}
+
+/* ── FOND ANIMÉ ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 10% 20%, #1a2f5a55 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 90% 80%, #0d3a2a44 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 50%, #2a1f0a22 0%, transparent 70%);
+  pointer-events:none;
+}
+body>*{position:relative;z-index:1;}
+
+/* ── HEADER ── */
+.header{
+  background:linear-gradient(135deg,#0f1e38,#111f30,#0a1a25);
+  border-bottom:2px solid var(--border);
+  padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  box-shadow:0 2px 20px rgba(79,142,247,.15);
+}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{
+  width:44px;height:44px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--bleu),var(--vert));
+  display:grid;place-items:center;font-size:22px;
+  box-shadow:0 0 16px rgba(79,142,247,.4);
+}
+.logo h1{font-size:15px;font-weight:800;color:var(--bleu2);}
+.logo p{font-size:11px;color:var(--muted);}
+.header-btns{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* ── BARRE STOCKAGE ── */
+.storage-wrap{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:9px 18px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.storage-label{font-size:11px;color:var(--muted);white-space:nowrap;}
+.storage-track{flex:1;min-width:120px;height:7px;background:var(--border);border-radius:6px;overflow:hidden;}
+.storage-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--vert),var(--bleu));transition:width .4s;}
+.storage-stats{font-size:11px;color:var(--muted);white-space:nowrap;font-family:monospace;}
+.db-chip{font-size:10px;padding:3px 10px;border-radius:10px;font-weight:700;background:#0d3a2a;color:var(--vert);border:1px solid #1a5a40;}
+
+/* ── GUIDE ── */
+.guide{
+  margin:14px 16px;
+  background:linear-gradient(135deg,#0d1e38,#0a2218);
+  border:1.5px solid var(--bleu);border-radius:var(--radius);padding:14px 16px;
+  box-shadow:0 0 20px rgba(79,142,247,.08);
+}
+.guide-title{font-size:13px;font-weight:800;color:var(--bleu2);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.guide-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:8px;}
+.guide-step{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;font-size:12px;font-weight:600;line-height:1.5;color:var(--text);
+}
+.guide-step .num{font-size:20px;font-weight:900;display:block;margin-bottom:4px;}
+.guide-step:nth-child(1) .num{color:var(--bleu);}
+.guide-step:nth-child(2) .num{color:var(--jaune);}
+.guide-step:nth-child(3) .num{color:var(--vert);}
+.guide-step:nth-child(4) .num{color:var(--bleu2);}
+
+/* ── ZONES ── */
+.zones{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 16px 14px;}
+.zone-card{
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+}
+.zone-card.doc-card{border-top:3px solid var(--bleu);}
+.zone-card.med-card{border-top:3px solid var(--jaune);}
+.zone-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.zone-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:6px;}
+.zone-title.doc-t{color:var(--bleu);}
+.zone-title.med-t{color:var(--jaune);}
+
+/* ── DROP ZONE ── */
+.drop-zone{
+  margin:12px;border:2px dashed var(--border);border-radius:10px;
+  padding:22px 14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;
+  background:var(--panel);
+}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--vert);background:#0a2218;}
+.drop-zone.doc-dz:hover,.drop-zone.doc-dz.drag-over{border-color:var(--bleu);background:#0a1a35;}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.drop-icon{font-size:28px;margin-bottom:8px;}
+.drop-title{font-size:13px;font-weight:700;margin-bottom:4px;color:var(--text);}
+.drop-sub{font-size:11px;color:var(--muted);line-height:1.6;}
+.badges{margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
+.badge{font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid var(--border);color:var(--muted);font-family:monospace;}
+.badge.doc{border-color:#4f8ef755;color:#87CEEB;}
+.badge.med{border-color:#f5c84255;color:var(--jaune);}
+
+/* ── FILE QUEUE ── */
+.file-queue{margin:0 12px;max-height:170px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;}
+.fitem{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:7px 10px;display:flex;align-items:center;gap:8px;font-size:12px;}
+.fitem-icon{font-size:15px;flex-shrink:0;}
+.fitem-name{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-weight:600;color:var(--text);}
+.fitem-size{color:var(--muted);font-size:10px;font-family:monospace;}
+.fitem-status{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;white-space:nowrap;}
+.s-wait{background:#1a2235;color:var(--muted);}
+.s-conv{background:#0d1e38;color:var(--bleu);}
+.s-done{background:#0a2218;color:var(--vert);}
+.s-err {background:#2a1010;color:var(--danger);}
+.fitem-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;transition:color .15s;padding:0 2px;}
+.fitem-del:hover{color:var(--danger);}
+
+/* ── PROGRESS ── */
+.prog-wrap{margin:8px 12px;height:5px;background:var(--border);border-radius:4px;overflow:hidden;display:none;}
+.prog-wrap.active{display:block;}
+.prog-fill{height:100%;border-radius:4px;width:0;transition:width .3s;}
+.prog-doc  .prog-fill{background:linear-gradient(90deg,var(--bleu),var(--vert));}
+.prog-med  .prog-fill{background:linear-gradient(90deg,var(--jaune),var(--vert));}
+
+/* ── BTN CONVERTIR ── */
+.btn-conv{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin:8px 12px 12px;padding:11px;border-radius:30px;border:none;
+  font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;
+  transition:opacity .15s,transform .1s,box-shadow .2s;
+  width:calc(100% - 24px);letter-spacing:.02em;
+}
+.btn-conv:hover{opacity:.88;box-shadow:0 4px 16px rgba(0,0,0,.4);}
+.btn-conv:active{transform:scale(.97);}
+.btn-conv-doc{background:linear-gradient(135deg,var(--bleu),#2255cc);color:white;box-shadow:0 2px 12px rgba(79,142,247,.3);}
+.btn-conv-med{background:linear-gradient(135deg,var(--jaune),var(--jaune2));color:#0b0f1a;box-shadow:0 2px 12px rgba(245,200,66,.25);}
+
+/* ── LOG ── */
+.log-wrap{margin:0 16px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.log-head{padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--panel);}
+.log-title{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+.log-body{padding:10px 14px;font-family:monospace;font-size:11px;line-height:2;max-height:130px;overflow-y:auto;color:var(--muted);background:var(--bg);}
+.le{display:flex;gap:10px;}
+.lt{color:#2a3a55;flex-shrink:0;}
+.lok  {color:var(--vert);}
+.lwarn{color:var(--jaune);}
+.lerr {color:var(--danger);}
+.linfo{color:var(--bleu);}
+
+/* ── BIBLIO ── */
+.biblio-wrap{margin:0 16px 24px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.biblio-head{
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  background:linear-gradient(90deg,#0d1e38,#0a2218);
+}
+.biblio-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--vert);display:flex;align-items:center;gap:6px;}
+.biblio-grid{padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;max-height:260px;overflow-y:auto;}
+.bitem{
+  background:var(--card);border:1.5px solid var(--border);border-radius:10px;
+  padding:12px;cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .2s;position:relative;
+}
+.bitem:hover{border-color:var(--vert);transform:translateY(-2px);box-shadow:0 6px 20px rgba(52,196,139,.15);}
+.bitem-actions{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity .15s;}
+.bitem:hover .bitem-actions{opacity:1;}
+.bitem-icon{font-size:24px;margin-bottom:6px;}
+.bitem-name{font-size:12px;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:3px;color:var(--text);}
+.bitem-meta{font-size:10px;color:var(--muted);}
+.biblio-empty{grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:13px;font-weight:600;line-height:2;}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:100;justify-content:center;align-items:center;padding:14px;}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:16px;width:90%;max-width:520px;padding:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);position:relative;
+}
+.modal-title{font-size:15px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--text);}
+.modal-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.5em;cursor:pointer;color:var(--muted);transition:.2s;}
+.modal-close:hover{color:var(--danger);transform:rotate(90deg);}
+.modal audio,.modal video{width:100%;border-radius:8px;margin-bottom:12px;}
+
+/* ── BOUTONS GÉNÉRIQUES ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:30px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:opacity .15s,transform .1s;white-space:nowrap;}
+.btn:hover{opacity:.85;}
+.btn:active{transform:scale(.97);}
+.btn-vert   {background:var(--vert2);color:white;}
+.btn-bleu   {background:var(--bleu);color:white;}
+.btn-jaune  {background:var(--jaune);color:#0b0f1a;}
+.btn-danger {background:var(--danger);color:white;}
+.btn-ghost  {background:transparent;border:1.5px solid var(--border);color:var(--text);}
+.btn-ghost:hover{border-color:var(--vert);color:var(--vert);}
+.btn-sm{padding:4px 10px;font-size:11px;border-radius:20px;}
+.btn:disabled{opacity:.4;cursor:default;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:680px){
+  .zones{grid-template-columns:1fr;padding:0 10px 10px;}
+  .guide-steps{grid-template-columns:1fr 1fr;}
+  .guide,.log-wrap,.biblio-wrap{margin-left:10px;margin-right:10px;}
+}
+@media(max-width:400px){
+  .guide-steps{grid-template-columns:1fr;}
+  .header{padding:10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">🔄</div>
+    <div>
+      <h1>Mini-Convertisseur · Tossara</h1>
+      <p>Pont direct → Biblio de l'Agent Principal</p>
+    </div>
+  </div>
+  <div class="header-btns">
+    <button class="btn btn-ghost" onclick="exporterBiblio()"><i class="fa-solid fa-upload"></i> Exporter</button>
+    <button class="btn btn-ghost" onclick="importerBiblio()"><i class="fa-solid fa-download"></i> Importer</button>
+    <button class="btn btn-danger btn-sm" onclick="viderBiblio()"><i class="fa-solid fa-trash"></i> Vider</button>
+    <button class="btn btn-vert" onclick="scrollBiblio()"><i class="fa-solid fa-book"></i> Voir Biblio</button>
+    <input type="file" id="import-input" accept=".json" style="display:none" onchange="handleImport(event)"/>
+  </div>
+</div>
+
+<!-- BARRE STOCKAGE -->
+<div class="storage-wrap">
+  <span class="storage-label"><i class="fa-solid fa-database" style="color:var(--vert);margin-right:5px;"></i>Stockage partagé (tossara_biblio)</span>
+  <div class="storage-track"><div class="storage-fill" id="sfill" style="width:0%"></div></div>
+  <span class="storage-stats" id="sstats">Calcul…</span>
+  <span class="db-chip" id="dbchip">⏳ Connexion…</span>
+</div>
+
+<!-- GUIDE -->
+<div class="guide">
+  <div class="guide-title"><i class="fa-solid fa-circle-info"></i> Comment utiliser ce convertisseur</div>
+  <div class="guide-steps">
+    <div class="guide-step"><span class="num">1</span>Déposez vos fichiers dans la zone correspondante (documents ou médias)</div>
+    <div class="guide-step"><span class="num">2</span>Cliquez <b>Convertir & envoyer</b> — le fichier rejoint automatiquement la Biblio</div>
+    <div class="guide-step"><span class="num">3</span>Ouvrez l'Agent Principal → bouton <b>Biblio</b> : vos ressources y sont visibles</div>
+    <div class="guide-step"><span class="num">4</span>Cliquez sur <b>▶ Test</b> pour écouter/regarder un audio ou vidéo avant de valider</div>
+  </div>
+</div>
+
+<!-- ZONES -->
+<div class="zones">
+
+  <!-- DOCUMENTS -->
+  <div class="zone-card doc-card">
+    <div class="zone-head">
+      <div class="zone-title doc-t"><i class="fa-solid fa-file-lines"></i> Documents textuels</div>
+      <button class="btn btn-ghost btn-sm" onclick="viderFile('doc')">Vider</button>
+    </div>
+    <div class="drop-zone doc-dz" id="dz-doc"
+         ondragover="onOver(event,'dz-doc')" ondragleave="onLeave('dz-doc')" ondrop="onDrop(event,'doc')">
+      <input type="file" multiple accept=".pdf,.epub,.txt,.docx,.odt,.rtf,.md,.html,.csv" onchange="onSelect(event,'doc')"/>
+      <div class="drop-icon">📂</div>
+      <div class="drop-title">Glisser-déposer ou cliquer</div>
+      <div class="drop-sub">PDF, EPUB, TXT, DOCX, ODT<br>RTF, MD, HTML, CSV</div>
+      <div class="badges">
+        <span class="badge doc">PDF</span><span class="badge doc">EPUB</span>
+        <span class="badge doc">TXT</span><span class="badge doc">DOCX</span>
+        <span class="badge doc">MD</span><span class="badge doc">CSV</span>
+      </div>
+    </div>
+    <div class="file-queue" id="q-doc"></div>
+    <div class="prog-wrap prog-doc" id="p-doc"><div class="prog-fill" id="pf-doc"></div></div>
+    <button class="btn-conv btn-conv-doc" onclick="convertirTout('doc')">
+      <i class="fa-solid fa-bolt"></i> Convertir &amp; envoyer à la Biblio
+    </button>
+  </div>
+
+  <!-- MÉDIAS -->
+  <div class="zone-card med-card">
+    <div class="zone-head">
+      <div class="zone-title med-t"><i class="fa-solid fa-photo-film"></i> Audio &amp; Vidéo</div>
+      <button class="btn btn-ghost btn-sm" onclick="viderFile('media')">Vider</button>
+    </div>
+    <div class="drop-zone" id="dz-media"
+         ondragover="onOver(event,'dz-media')" ondragleave="onLeave('dz-media')" ondrop="onDrop(event,'media')">
+      <input type="file" multiple accept=".mp3,.mp4,.ogg,.wav,.webm,.aac,.m4a,.flac,.mkv,.avi" onchange="onSelect(event,'media')"/>
+      <div class="drop-icon">🎙</div>
+      <div class="drop-title">Glisser-déposer ou cliquer</div>
+      <div class="drop-sub">MP3, MP4, OGG, WAV, WEBM<br>AAC, M4A, FLAC, MKV, AVI</div>
+      <div class="badges">
+        <span class="badge med">MP3</span><span class="badge med">MP4</span>
+        <span class="badge med">OGG</span><span class="badge med">WAV</span>
+        <span class="badge med">WEBM</span><span class="badge med">AAC</span>
+      </div>
+    </div>
+    <div class="file-queue" id="q-media"></div>
+    <div class="prog-wrap prog-med" id="p-media"><div class="prog-fill" id="pf-media"></div></div>
+    <button class="btn-conv btn-conv-med" onclick="convertirTout('media')">
+      <i class="fa-solid fa-bolt"></i> Convertir &amp; envoyer à la Biblio
+    </button>
+  </div>
+
+</div>
+
+<!-- LOG -->
+<div class="log-wrap">
+  <div class="log-head">
+    <span class="log-title"><i class="fa-solid fa-terminal" style="color:var(--vert);margin-right:6px;"></i>Journal d'activité</span>
+    <button class="btn btn-ghost btn-sm" onclick="viderLog()">Effacer</button>
+  </div>
+  <div class="log-body" id="log-body">
+    <div class="le"><span class="lt">--:--:--</span><span class="linfo">Convertisseur prêt · Connexion à tossara_biblio en cours…</span></div>
+  </div>
+</div>
+
+<!-- BIBLIO -->
+<div class="biblio-wrap" id="section-biblio">
+  <div class="biblio-head">
+    <div class="biblio-title"><i class="fa-solid fa-book-open"></i> Biblio partagée — visible dans l'Agent Principal</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <span id="bcount" style="font-size:11px;color:var(--muted);">0 élément(s)</span>
+      <button class="btn btn-ghost btn-sm" onclick="rafraichirBiblio()"><i class="fa-solid fa-rotate"></i> Actualiser</button>
+    </div>
+  </div>
+  <div class="biblio-grid" id="bgrid">
+    <div class="biblio-empty">🕌 Biblio vide.<br>Convertissez des ressources pour les voir ici.</div>
+  </div>
+</div>
+
+<!-- MODAL LECTEUR -->
+<div class="modal-overlay" id="modal-player">
+  <div class="modal">
+    <button class="modal-close" onclick="fermerPlayer()">✕</button>
+    <div class="modal-title"><span id="pl-icon">🎵</span>&nbsp;<span id="pl-titre">Lecture</span></div>
+    <div id="pl-meta" style="font-size:11px;color:var(--muted);margin-bottom:12px;"></div>
+    <div id="pl-body"></div>
+    <div style="text-align:right;margin-top:12px;">
+      <button class="btn btn-ghost" onclick="fermerPlayer()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   INDEXEDDB — tossara_biblio (même base que l'Agent Principal)
+═══════════════════════════════════════════════ */
+const DB_NAME='tossara_biblio', STORE='fichiers';
+let _db=null;
+
+function ouvrirDB(){
+  return new Promise((res,rej)=>{
+    if(_db) return res(_db);
+    const req=indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded=e=>{
+      const db=e.target.result;
+      if(!db.objectStoreNames.contains(STORE))
+        db.createObjectStore(STORE,{keyPath:'id'});
+    };
+    req.onsuccess=e=>{_db=e.target.result;res(_db);};
+    req.onerror  =e=>rej(e.target.error);
+  });
+}
+const dbPut=obj=>new Promise((res,rej)=>{const tx=_db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(obj);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});
+const dbGetAll=()=>new Promise((res,rej)=>{const tx=_db.transaction(STORE,'readonly');const r=tx.objectStore(STORE).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});
+const dbDelete=id=>new Promise((res,rej)=>{const tx=_db.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(id);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});
+const dbClear=()=>new Promise((res,rej)=>{const tx=_db.transaction(STORE,'readwrite');tx.objectStore(STORE).clear();tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});
+
+/* ═══════════════════════════════════════════════
+   MÉTA localStorage (comme BiblioPartagee)
+═══════════════════════════════════════════════ */
+const getMeta=()=>{try{return JSON.parse(localStorage.getItem('biblio_meta')||'[]');}catch{return [];}};
+const setMeta=a=>localStorage.setItem('biblio_meta',JSON.stringify(a));
+
+const MIMES={mp3:'audio/mpeg',mp4:'video/mp4',ogg:'audio/ogg',wav:'audio/wav',webm:'video/webm',aac:'audio/aac',m4a:'audio/mp4',flac:'audio/flac',mkv:'video/x-matroska',avi:'video/x-msvideo',pdf:'application/pdf',epub:'application/epub+zip',txt:'text/plain',html:'text/html',csv:'text/csv',md:'text/markdown',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'};
+const ICONS={pdf:'📄',epub:'📖',txt:'📝',docx:'📃',odt:'📃',rtf:'📃',md:'📝',html:'🌐',csv:'📊',mp3:'🎵',mp4:'🎬',ogg:'🎵',wav:'🎵',webm:'🎬',aac:'🎵',m4a:'🎵',flac:'🎵',mkv:'🎬',avi:'🎬'};
+const guessMime=ext=>MIMES[ext]||'application/octet-stream';
+const icone=n=>ICONS[(n.split('.').pop()||'').toLowerCase()]||'📁';
+const formatSize=b=>b<1024?b+' o':b<1048576?(b/1024).toFixed(1)+' Ko':b<1073741824?(b/1048576).toFixed(1)+' Mo':(b/1073741824).toFixed(2)+' Go';
+
+async function ajouterAuBiblio(file){
+  const ext=(file.name.split('.').pop()||'').toLowerCase();
+  const mime=file.type||guessMime(ext);
+  const id='bib_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  const isMedia=/^(mp3|mp4|ogg|wav|webm|aac|m4a|flac|mkv|avi)$/.test(ext);
+  const type=isMedia?'media':'document';
+  const sousType=isMedia?(/mp4|mkv|avi|webm/.test(ext)?'video':'audio'):ext;
+  const entree={id,titre:file.name,type,sousType,date:new Date().toISOString(),taille:file.size,aBlob:true,mime,data:null,extra:{taille_affiche:formatSize(file.size),extension:ext},blob:file};
+  await dbPut(entree);
+  const meta=getMeta();
+  meta.push({id,titre:file.name,type,sousType,date:entree.date,taille:file.size,aBlob:true,mime,data:null,extra:entree.extra});
+  setMeta(meta);
+  window.dispatchEvent(new CustomEvent('biblio:maj'));
+  return entree;
+}
+
+/* ═══════════════════════════════════════════════
+   FILES QUEUES
+═══════════════════════════════════════════════ */
+const queues={doc:[],media:[]};
+const statusCls=s=>({wait:'s-wait',conv:'s-conv',done:'s-done',error:'s-err'}[s]||'s-wait');
+const statusLbl=s=>({wait:'En attente',conv:'Conversion…',done:'✓ Envoyé',error:'✗ Erreur'}[s]||s);
+
+function ajouterFichiers(type,files){
+  for(const f of files) queues[type].push({file:f,status:'wait',uid:crypto.randomUUID()});
+  renderQueue(type);
+}
+function viderFile(type){queues[type]=[];renderQueue(type);}
+function renderQueue(type){
+  const el=document.getElementById('q-'+type);el.innerHTML='';
+  queues[type].forEach(e=>{
+    const d=document.createElement('div');d.className='fitem';d.id='fi-'+e.uid;
+    d.innerHTML=`<span class="fitem-icon">${icone(e.file.name)}</span><span class="fitem-name" title="${e.file.name}">${e.file.name}</span><span class="fitem-size">${formatSize(e.file.size)}</span><span class="fitem-status ${statusCls(e.status)}" id="fs-${e.uid}">${statusLbl(e.status)}</span><button class="fitem-del" onclick="retirerFichier('${type}','${e.uid}')">✕</button>`;
+    el.appendChild(d);
+  });
+}
+function retirerFichier(type,uid){queues[type]=queues[type].filter(e=>e.uid!==uid);renderQueue(type);}
+function majStatut(uid,s){const el=document.getElementById('fs-'+uid);if(el){el.className='fitem-status '+statusCls(s);el.textContent=statusLbl(s);}}
+
+function onOver(e,id){e.preventDefault();document.getElementById(id).classList.add('drag-over');}
+function onLeave(id){document.getElementById(id).classList.remove('drag-over');}
+function onDrop(e,type){
+  e.preventDefault();
+  document.getElementById(type==='doc'?'dz-doc':'dz-media').classList.remove('drag-over');
+  const files=Array.from(e.dataTransfer.files);
+  if(files.length){ajouterFichiers(type,files);log('info',`${files.length} fichier(s) ajouté(s)`);}
+}
+function onSelect(e,type){
+  const files=Array.from(e.target.files);
+  if(files.length){ajouterFichiers(type,files);log('info',`${files.length} fichier(s) sélectionné(s)`);}
+  e.target.value='';
+}
+
+/* ═══════════════════════════════════════════════
+   CONVERSION
+═══════════════════════════════════════════════ */
+async function convertirTout(type){
+  const liste=queues[type].filter(e=>e.status==='wait');
+  if(!liste.length){log('warn','Aucun fichier en attente dans cette zone');return;}
+  const prog=document.getElementById('p-'+type),fill=document.getElementById('pf-'+type);
+  prog.classList.add('active');
+  for(let i=0;i<liste.length;i++){
+    const e=liste[i];e.status='conv';majStatut(e.uid,'conv');
+    fill.style.width=(i/liste.length*80)+'%';
+    try{
+      await ajouterAuBiblio(e.file);
+      e.status='done';majStatut(e.uid,'done');
+      log('ok',`→ Biblio : "${e.file.name}" (${formatSize(e.file.size)})`);
+    }catch(err){e.status='error';majStatut(e.uid,'error');log('err',`Erreur : ${e.file.name} — ${err.message}`);}
+  }
+  fill.style.width='100%';
+  setTimeout(()=>{prog.classList.remove('active');fill.style.width='0';},700);
+  await rafraichirBiblio();await majStockage();
+}
+
+/* ═══════════════════════════════════════════════
+   BIBLIO
+═══════════════════════════════════════════════ */
+async function rafraichirBiblio(){
+  const items=await dbGetAll();
+  const grid=document.getElementById('bgrid');
+  document.getElementById('bcount').textContent=`${items.length} élément(s)`;
+  if(!items.length){grid.innerHTML='<div class="biblio-empty">🕌 Biblio vide.<br>Convertissez des ressources pour les voir ici.</div>';return;}
+  const icoMap={media:'🎬',document:'📄',coran:'📖'};
+  grid.innerHTML='';
+  items.forEach(item=>{
+    if(!item.titre)return;
+    const div=document.createElement('div');div.className='bitem';
+    const ico=icoMap[item.type]||'📁';
+    const short=item.titre.length>28?item.titre.substring(0,26)+'…':item.titre;
+    const stype=(item.sousType||item.type||'').toUpperCase();
+    const taille=item.extra&&item.extra.taille_affiche?item.extra.taille_affiche:formatSize(item.taille||0);
+    const isMedia=item.type==='media'||item.sousType==='audio'||item.sousType==='video';
+    div.innerHTML=`
+      <div class="bitem-actions">
+        ${isMedia?`<button class="btn btn-jaune btn-sm" onclick="lireMedia('${item.id}')">▶ Test</button>`:''}
+        <button class="btn btn-ghost btn-sm" onclick="supprimerItem('${item.id}')">✕</button>
+      </div>
+      <div class="bitem-icon">${ico}</div>
+      <div class="bitem-name" title="${item.titre}">${short}</div>
+      <div class="bitem-meta">${stype} · ${taille}<br>${(item.date||'').substring(0,10)}</div>`;
+    div.onclick=e=>{if(e.target.closest('button'))return;if(isMedia)lireMedia(item.id);};
+    grid.appendChild(div);
+  });
+}
+
+async function lireMedia(id){
+  const items=await dbGetAll();const item=items.find(i=>i.id===id);
+  if(!item){log('err','Élément introuvable');return;}
+  let url=null;
+  if(item.blob) url=URL.createObjectURL(item.blob);
+  else if(item.data&&item.data.audio) url=item.data.audio;
+  else if(item.data&&item.data.src)   url=item.data.src;
+  if(!url){log('err','Aucune source pour '+item.titre);return;}
+  document.getElementById('pl-icon').textContent=item.sousType==='video'?'🎬':'🎵';
+  document.getElementById('pl-titre').textContent=item.titre;
+  document.getElementById('pl-meta').textContent=`${(item.sousType||item.type||'').toUpperCase()} · ${item.extra&&item.extra.taille_affiche?item.extra.taille_affiche:''} · ${(item.date||'').substring(0,10)}`;
+  const tag=item.sousType==='video'?'video':'audio';
+  document.getElementById('pl-body').innerHTML=`<${tag} controls src="${url}" style="width:100%;border-radius:8px;background:#000;margin-bottom:10px"></${tag}>`;
+  document.getElementById('modal-player').classList.add('open');
+  log('info','Lecture : '+item.titre);
+}
+function fermerPlayer(){document.getElementById('modal-player').classList.remove('open');document.getElementById('pl-body').innerHTML='';}
+
+async function supprimerItem(id){
+  await dbDelete(id);setMeta(getMeta().filter(m=>m.id!==id));
+  window.dispatchEvent(new CustomEvent('biblio:maj'));
+  log('warn','Élément supprimé : '+id);
+  await rafraichirBiblio();await majStockage();
+}
+
+/* ═══════════════════════════════════════════════
+   EXPORT / IMPORT / VIDER
+═══════════════════════════════════════════════ */
+async function exporterBiblio(){
+  const meta=getMeta();
+  if(!meta.length){log('warn','Biblio vide — rien à exporter');return;}
+  const blob=new Blob([JSON.stringify({version:1,date:new Date().toISOString(),ressources:meta},null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`tossara_biblio_${Date.now()}.json`;a.click();URL.revokeObjectURL(url);
+  log('ok',`Export JSON : ${meta.length} ressource(s)`);
+}
+function importerBiblio(){document.getElementById('import-input').click();}
+async function handleImport(e){
+  const file=e.target.files[0];if(!file)return;
+  try{
+    const data=JSON.parse(await file.text());
+    const list=data.ressources||(Array.isArray(data)?data:[data]);
+    let count=0;
+    for(const item of list){
+      const clean={...item};delete clean.id;
+      clean.id='bib_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+      await dbPut(clean);
+      const meta=getMeta();meta.push({id:clean.id,titre:clean.titre,type:clean.type,sousType:clean.sousType,date:clean.date,taille:clean.taille,aBlob:clean.aBlob,mime:clean.mime,data:clean.data,extra:clean.extra});setMeta(meta);count++;
+    }
+    log('ok',`Import : ${count} ressource(s) ajoutée(s)`);
+    window.dispatchEvent(new CustomEvent('biblio:maj'));
+    await rafraichirBiblio();await majStockage();
+  }catch(err){log('err','Import échoué : '+err.message);}
+  e.target.value='';
+}
+async function viderBiblio(){
+  if(!confirm('Vider entièrement la Biblio partagée ? Action irréversible.'))return;
+  await dbClear();setMeta([]);
+  window.dispatchEvent(new CustomEvent('biblio:maj'));
+  log('warn','Biblio vidée');await rafraichirBiblio();await majStockage();
+}
+function scrollBiblio(){document.getElementById('section-biblio').scrollIntoView({behavior:'smooth'});}
+
+/* STOCKAGE */
+async function majStockage(){
+  try{
+    const meta=getMeta();const total=meta.reduce((s,i)=>s+(i.taille||0),0);
+    const pct=Math.min(100,(total/(2*1024*1024*1024))*100);
+    document.getElementById('sfill').style.width=pct+'%';
+    document.getElementById('sstats').textContent=`${formatSize(total)} / ~2 Go (${pct.toFixed(2)}%)`;
+  }catch{document.getElementById('sstats').textContent='N/D';}
+}
+
+/* LOG */
+function log(type,msg){
+  const body=document.getElementById('log-body');
+  const now=new Date().toLocaleTimeString('fr-FR');
+  const cls={ok:'lok',warn:'lwarn',err:'lerr',info:'linfo'}[type]||'';
+  const d=document.createElement('div');d.className='le';
+  d.innerHTML=`<span class="lt">${now}</span><span class="${cls}">${msg}</span>`;
+  body.appendChild(d);body.scrollTop=body.scrollHeight;
+}
+function viderLog(){document.getElementById('log-body').innerHTML='';}
+
+/* MODAL FERMER */
+document.getElementById('modal-player').addEventListener('click',function(e){if(e.target===this)fermerPlayer();});
+
+/* INIT */
+(async()=>{
+  try{
+    await ouvrirDB();
+    const chip=document.getElementById('dbchip');
+    chip.textContent='✓ Connecté';chip.style.cssText='font-size:10px;padding:3px 10px;border-radius:10px;font-weight:700;background:#0a2218;color:#34c48b;border:1px solid #1a5a40;';
+    log('ok','Base tossara_biblio connectée — pont Agent Principal actif ✓');
+    await rafraichirBiblio();await majStockage();
+  }catch(err){
+    const chip=document.getElementById('dbchip');
+    chip.textContent='✗ Erreur';chip.style.cssText='font-size:10px;padding:3px 10px;border-radius:10px;font-weight:700;background:#2a1010;color:#e05c5c;border:1px solid #5a2020;';
+    log('err',"Impossible d'ouvrir tossara_biblio : "+err.message);
+  }
+})();
+</script>
+</body>
+</html>
