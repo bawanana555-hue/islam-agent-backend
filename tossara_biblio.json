@@ -1,0 +1,204 @@
+{
+  "version": 1,
+  "date": "2026-09-19T17:25:36.029Z",
+  "ressources": [
+    {
+      "id": "bib_1789374622461_xdjqi",
+      "titre": "Sourate 1 (FR)",
+      "type": "coran",
+      "sousType": "json",
+      "date": "2026-09-14T08:30:22.461Z",
+      "taille": 1456,
+      "aBlob": false,
+      "mime": "",
+      "data": {
+        "surah": 1,
+        "name": "1",
+        "lang": "fr",
+        "reciter": "ar.alafasy",
+        "verses": [
+          {
+            "num": 1,
+            "ar": "﻿بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+            "trans": "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3"
+          },
+          {
+            "num": 2,
+            "ar": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+            "trans": "Louange à Allah, Seigneur de l'univers.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/2.mp3"
+          },
+          {
+            "num": 3,
+            "ar": "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+            "trans": "Le Tout Miséricordieux, le Très Miséricordieux,",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/3.mp3"
+          },
+          {
+            "num": 4,
+            "ar": "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+            "trans": "Maître du Jour de la rétribution.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/4.mp3"
+          },
+          {
+            "num": 5,
+            "ar": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+            "trans": "C'est Toi [Seul] que nous adorons, et c'est Toi [Seul] dont nous implorons secours.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/5.mp3"
+          },
+          {
+            "num": 6,
+            "ar": "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+            "trans": "Guide-nous dans le droit chemin,",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/6.mp3"
+          },
+          {
+            "num": 7,
+            "ar": "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+            "trans": "le chemin de ceux que Tu as comblés de faveurs, non pas de ceux qui ont encouru Ta colère, ni des égarés.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/7.mp3"
+          }
+        ]
+      },
+      "extra": {}
+    },
+    {
+      "id": "bib_1789374628134_ik0n1",
+      "titre": "Sourate 1 (FR)",
+      "type": "coran",
+      "sousType": "json",
+      "date": "2026-09-14T08:30:28.134Z",
+      "taille": 1456,
+      "aBlob": false,
+      "mime": "",
+      "data": {
+        "surah": 1,
+        "name": "1",
+        "lang": "fr",
+        "reciter": "ar.alafasy",
+        "verses": [
+          {
+            "num": 1,
+            "ar": "﻿بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+            "trans": "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3"
+          },
+          {
+            "num": 2,
+            "ar": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+            "trans": "Louange à Allah, Seigneur de l'univers.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/2.mp3"
+          },
+          {
+            "num": 3,
+            "ar": "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+            "trans": "Le Tout Miséricordieux, le Très Miséricordieux,",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/3.mp3"
+          },
+          {
+            "num": 4,
+            "ar": "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+            "trans": "Maître du Jour de la rétribution.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/4.mp3"
+          },
+          {
+            "num": 5,
+            "ar": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+            "trans": "C'est Toi [Seul] que nous adorons, et c'est Toi [Seul] dont nous implorons secours.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/5.mp3"
+          },
+          {
+            "num": 6,
+            "ar": "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+            "trans": "Guide-nous dans le droit chemin,",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/6.mp3"
+          },
+          {
+            "num": 7,
+            "ar": "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+            "trans": "le chemin de ceux que Tu as comblés de faveurs, non pas de ceux qui ont encouru Ta colère, ni des égarés.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/7.mp3"
+          }
+        ]
+      },
+      "extra": {}
+    },
+    {
+      "id": "bib_1789661876597_plp2z",
+      "titre": "Sourate 1 (FR)",
+      "type": "coran",
+      "sousType": "json",
+      "date": "2026-09-17T16:17:56.597Z",
+      "taille": 1456,
+      "aBlob": false,
+      "mime": "",
+      "data": {
+        "surah": 1,
+        "name": "1",
+        "lang": "fr",
+        "reciter": "ar.alafasy",
+        "verses": [
+          {
+            "num": 1,
+            "ar": "﻿بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+            "trans": "Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/1.mp3"
+          },
+          {
+            "num": 2,
+            "ar": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+            "trans": "Louange à Allah, Seigneur de l'univers.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/2.mp3"
+          },
+          {
+            "num": 3,
+            "ar": "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+            "trans": "Le Tout Miséricordieux, le Très Miséricordieux,",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/3.mp3"
+          },
+          {
+            "num": 4,
+            "ar": "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+            "trans": "Maître du Jour de la rétribution.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/4.mp3"
+          },
+          {
+            "num": 5,
+            "ar": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+            "trans": "C'est Toi [Seul] que nous adorons, et c'est Toi [Seul] dont nous implorons secours.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/5.mp3"
+          },
+          {
+            "num": 6,
+            "ar": "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+            "trans": "Guide-nous dans le droit chemin,",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/6.mp3"
+          },
+          {
+            "num": 7,
+            "ar": "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+            "trans": "le chemin de ceux que Tu as comblés de faveurs, non pas de ceux qui ont encouru Ta colère, ni des égarés.",
+            "audio": "https://cdn.islamic.network/quran/audio/128/ar.alafasy/7.mp3"
+          }
+        ]
+      },
+      "extra": {}
+    },
+    {
+      "id": "bib_1789838666382_w98e9",
+      "titre": "449747.mp4",
+      "type": "media",
+      "sousType": "video",
+      "date": "2026-09-19T17:24:26.389Z",
+      "taille": 1064216,
+      "aBlob": true,
+      "mime": "video/mp4",
+      "data": null,
+      "extra": {
+        "taille_affiche": "1.0 Mo",
+        "extension": "mp4"
+      }
+    }
+  ]
+}
