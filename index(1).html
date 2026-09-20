@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Biblio — Coran & Ressources académiques</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #222535;
+    --surface3: #2a2e42;
+    --border: rgba(255,255,255,.08);
+    --border-hi: rgba(255,255,255,.18);
+    --txt: #e8eaf0;
+    --txt2: #8b90a7;
+    --txt3: #565d78;
+    --gold: #c9a84c;
+    --gold-d: #a8883a;
+    --gold-glow: rgba(201,168,76,.15);
+    --teal: #2dd4bf;
+    --teal-d: #0d9488;
+    --blue: #60a5fa;
+    --green: #4ade80;
+    --red: #f87171;
+    --orange: #fb923c;
+    --purple: #a78bfa;
+    --r: 12px;
+    --shadow: 0 2px 16px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { overflow-x: hidden; max-width: 100%; }
+  img, video, iframe, svg { max-width: 100%; height: auto; display: block; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--txt);
+    min-height: 100vh;
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── LAYOUT ── */
+  .app { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
+  .col-main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .col-side  { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+  /* ── HEADER ── */
+  .app-header {
+    grid-column: 1 / -1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: var(--shadow);
+    min-width: 0;
+  }
+  .app-header .brand {
+    display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1 1 auto;
+  }
+  .app-header .brand > div { min-width: 0; }
+  .app-header .logo {
+    width: 40px; height: 40px; background: var(--gold-glow);
+    border: 1px solid var(--gold); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .app-header h1 { font-size: 1rem; font-weight: 600; color: var(--txt); overflow-wrap: anywhere; }
+  .app-header .sub { font-size: .75rem; color: var(--txt2); margin-top: 2px; overflow-wrap: anywhere; }
+  .app-header .hdr-actions { display: flex; gap: 8px; flex-wrap: wrap; flex-shrink: 0; }
+
+  /* ── SYNC STATUS ── */
+  .sync-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 20px; font-size: .72rem; font-weight: 600;
+    background: rgba(77,222,128,.08); border: 1px solid rgba(77,222,128,.25);
+    color: var(--green); cursor: default;
+  }
+  .sync-badge.warn { background: rgba(251,146,60,.08); border-color: rgba(251,146,60,.25); color: var(--orange); }
+  .sync-badge.err  { background: rgba(248,113,113,.08); border-color: rgba(248,113,113,.25); color: var(--red); }
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .sync-dot.pulse { animation: pulse 2s infinite; }
+  @keyframes pulse { 50% { opacity: .3; } }
+
+  /* ── PANELS ── */
+  .panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 20px; box-shadow: var(--shadow);
+    min-width: 0;
+  }
+  .panel-title {
+    font-size: .68rem; font-weight: 700; letter-spacing: 1.8px;
+    text-transform: uppercase; color: var(--txt3); margin-bottom: 16px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; flex-wrap: wrap;
+  }
+  .panel-title .badge-count {
+    background: var(--gold-glow); border: 1px solid var(--gold);
+    color: var(--gold); border-radius: 20px; padding: 2px 9px;
+    font-size: .68rem; font-weight: 700; letter-spacing: 0;
+  }
+
+  /* ── FORM CONTROLS ── */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .field { min-width: 0; }
+  .field label { display: block; font-size: .72rem; color: var(--txt2); margin-bottom: 6px; font-weight: 500; }
+  select, input[type=text] {
+    width: 100%; padding: 9px 12px;
+    background: var(--surface2); border: 1px solid var(--border-hi);
+    border-radius: 8px; color: var(--txt); font-size: .88rem;
+    font-family: inherit; outline: none; transition: .15s;
+    min-width: 0;
+  }
+  select:focus, input[type=text]:focus {
+    border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow);
+  }
+  select option { background: var(--surface2); }
+
+  /* ── BUTTONS ── */
+  button {
+    font-family: inherit; font-size: .84rem; font-weight: 600;
+    padding: 9px 16px; border-radius: 8px; border: 1px solid var(--border-hi);
+    background: var(--surface2); color: var(--txt);
+    cursor: pointer; transition: .15s; display: inline-flex; align-items: center; gap: 7px;
+    white-space: nowrap;
+  }
+  button:hover:not(:disabled) { background: var(--surface3); border-color: var(--border-hi); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-gold  { background: var(--gold); border-color: var(--gold); color: #0f1117; }
+  .btn-gold:hover:not(:disabled)  { background: var(--gold-d); border-color: var(--gold-d); }
+  .btn-teal  { background: var(--teal); border-color: var(--teal); color: #0f1117; }
+  .btn-teal:hover:not(:disabled)  { background: var(--teal-d); border-color: var(--teal-d); }
+  .btn-blue  { background: rgba(96,165,250,.15); border-color: rgba(96,165,250,.35); color: var(--blue); }
+  .btn-blue:hover:not(:disabled)  { background: rgba(96,165,250,.25); }
+  .btn-red   { background: rgba(248,113,113,.1); border-color: rgba(248,113,113,.3); color: var(--red); }
+  .btn-red:hover:not(:disabled)   { background: rgba(248,113,113,.2); }
+  .btn-purple { background: rgba(167,139,250,.12); border-color: rgba(167,139,250,.3); color: var(--purple); }
+  .btn-purple:hover:not(:disabled){ background: rgba(167,139,250,.22); }
+  .btn-sm { padding: 6px 11px; font-size: .76rem; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+  /* ── DROPZONE ── */
+  .dropzone {
+    border: 2px dashed var(--border-hi); border-radius: 10px;
+    padding: 28px 20px; text-align: center; cursor: pointer;
+    transition: .2s; background: var(--surface2); margin-bottom: 14px;
+    position: relative;
+  }
+  .dropzone:hover, .dropzone.drag { border-color: var(--teal); background: rgba(45,212,191,.06); }
+  .dropzone .dz-icon { font-size: 2rem; margin-bottom: 10px; }
+  .dropzone .dz-txt { font-size: .88rem; color: var(--txt2); }
+  .dropzone .dz-txt b { color: var(--teal); }
+  .dropzone .dz-hint { font-size: .72rem; color: var(--txt3); margin-top: 7px; overflow-wrap: anywhere; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { margin: 10px 0; display: none; }
+  .progress-wrap.show { display: block; }
+  .progress-bar { height: 5px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width .3s; }
+  .progress-label { font-size: .72rem; color: var(--txt2); margin-top: 5px; overflow-wrap: anywhere; }
+
+  /* ── FILTERS ── */
+  .filters { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+  .chip {
+    padding: 5px 12px; border: 1px solid var(--border-hi); border-radius: 20px;
+    font-size: .72rem; font-weight: 600; cursor: pointer; background: var(--surface2);
+    color: var(--txt2); transition: .15s;
+  }
+  .chip.active { background: var(--gold-glow); border-color: var(--gold); color: var(--gold); }
+
+  /* ── MEDIA QUEUE ITEMS ── */
+  .media-list { display: flex; flex-direction: column; gap: 9px; }
+  .media-item {
+    display: grid; grid-template-columns: 52px minmax(0, 1fr) auto;
+    gap: 10px; align-items: center; padding: 11px 12px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 9px;
+    transition: .15s; min-width: 0;
+  }
+  .media-item:hover { border-color: var(--border-hi); }
+  .media-thumb {
+    width: 52px; height: 52px; border-radius: 7px;
+    background: var(--surface3); display: flex; align-items: center;
+    justify-content: center; font-size: 1.4rem; overflow: hidden; flex-shrink: 0;
+  }
+  .media-thumb video, .media-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .media-info { min-width: 0; }
+  .media-info .fname {
+    font-size: .8rem; font-weight: 600;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .media-info .fmeta { font-size: .7rem; color: var(--txt2); margin-top: 2px; overflow-wrap: anywhere; }
+  .media-info input[type=text] { margin-top: 6px; padding: 5px 9px; font-size: .78rem; }
+  .media-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+  /* ── BIBLIO LIST ── */
+  .biblio-scroll { max-height: 480px; overflow-y: auto; display: flex; flex-direction: column; gap: 7px; }
+  .biblio-scroll::-webkit-scrollbar { width: 4px; }
+  .biblio-scroll::-webkit-scrollbar-track { background: transparent; }
+  .biblio-scroll::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+
+  .bib-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 9px;
+    cursor: pointer; transition: .15s; text-decoration: none;
+    min-width: 0;
+  }
+  .bib-item:hover { border-color: var(--gold); background: var(--gold-glow); }
+  .bib-item.active { border-color: var(--gold); background: var(--gold-glow); }
+  .bib-ico { font-size: 1.2rem; flex-shrink: 0; }
+  .bib-meta { flex: 1; min-width: 0; }
+  .bib-title { font-size: .83rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bib-sub   { font-size: .68rem; color: var(--txt2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bib-badge {
+    font-size: .63rem; font-weight: 700; padding: 2px 8px;
+    border-radius: 20px; flex-shrink: 0;
+    background: var(--gold-glow); border: 1px solid var(--gold); color: var(--gold);
+  }
+  .bib-badge.audio  { background: rgba(96,165,250,.1); border-color: rgba(96,165,250,.3); color: var(--blue); }
+  .bib-badge.video  { background: rgba(167,139,250,.1); border-color: rgba(167,139,250,.3); color: var(--purple); }
+  .bib-badge.doc    { background: rgba(251,146,60,.1); border-color: rgba(251,146,60,.3); color: var(--orange); }
+  .bib-badge.book   { background: rgba(248,113,113,.1); border-color: rgba(248,113,113,.3); color: var(--red); }
+  .bib-del { opacity: 0; transition: .15s; background: none; border: none; color: var(--red); padding: 3px; cursor: pointer; font-size: .9rem; }
+  .bib-item:hover .bib-del { opacity: 1; }
+
+  /* ── LECTURE SOURATE ── */
+  .surah-player {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; display: none;
+  }
+  .surah-player.show { display: block; }
+  .surah-player .player-title {
+    font-size: .82rem; font-weight: 700; color: var(--gold); margin-bottom: 12px;
+  }
+  .verse-list { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+  .verse-list::-webkit-scrollbar { width: 3px; }
+  .verse-list::-webkit-scrollbar-thumb { background: var(--surface3); }
+  .verse-card {
+    background: var(--surface3); border-radius: 8px; padding: 12px 14px;
+    border: 1px solid var(--border); transition: .15s;
+  }
+  .verse-card.playing { border-color: var(--gold); background: var(--gold-glow); }
+  .verse-card .verse-ar {
+    font-family: 'Amiri', serif; font-size: 1.2rem; text-align: right;
+    color: var(--txt); line-height: 2; direction: rtl;
+  }
+  .verse-card .verse-trans { font-size: .78rem; color: var(--txt2); margin-top: 6px; }
+  .verse-card .verse-num { font-size: .65rem; color: var(--txt3); margin-top: 4px; }
+  .player-controls { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .player-controls audio { flex: 1; min-width: 200px; height: 32px; }
+  audio { accent-color: var(--gold); }
+
+  /* ── STORAGE ── */
+  .storage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .storage-cell { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; min-width: 0; }
+  .storage-cell .sc-label { font-size: .67rem; color: var(--txt3); font-weight: 600; margin-bottom: 4px; }
+  .storage-cell .sc-val { font-size: 1.1rem; font-weight: 700; color: var(--txt); }
+  .storage-cell .sc-sub { font-size: .67rem; color: var(--txt2); margin-top: 2px; overflow-wrap: anywhere; }
+  .bar { height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+  .bar-fill { height: 100%; border-radius: 2px; transition: width .4s; }
+
+  /* ── EXPORT WIDGET ── */
+  .export-target {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 9px; padding: 14px; margin-top: 10px;
+  }
+  .export-target label { font-size: .75rem; color: var(--txt2); font-weight: 500; display: block; margin-bottom: 8px; }
+  .export-target input[type=text] { font-size: .8rem; }
+  .export-target .hint { font-size: .68rem; color: var(--txt3); margin-top: 6px; overflow-wrap: anywhere; }
+
+  /* ── MODAL ── */
+  .modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.75); z-index: 100;
+    align-items: center; justify-content: center; padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .modal.open { display: flex; }
+  .modal-box {
+    background: var(--surface); border: 1px solid var(--border-hi);
+    border-radius: 14px; max-width: 740px; width: 100%;
+    max-height: 88vh; overflow-y: auto; padding: 28px;
+    position: relative; animation: pop .2s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  }
+  @keyframes pop { from { transform: scale(.95); opacity: 0; } }
+  .modal-box h3 { font-size: 1.05rem; color: var(--gold); margin-bottom: 16px; }
+  .modal-box h4 { font-size: .85rem; color: var(--teal); margin: 16px 0 8px; font-weight: 600; }
+  .modal-box p, .modal-box li { font-size: .83rem; color: var(--txt2); margin-bottom: 5px; overflow-wrap: anywhere; }
+  .modal-box ol, .modal-box ul { margin-left: 20px; }
+  .modal-box code {
+    background: var(--surface2); padding: 2px 7px; border-radius: 4px;
+    font-size: .75rem; color: var(--teal); border: 1px solid var(--border-hi);
+  }
+  .modal-box pre {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; font-size: .73rem; overflow-x: auto; color: var(--txt2); margin: 8px 0;
+  }
+  .close-x { position: absolute; top: 14px; right: 14px; }
+  .preview-box { max-width: 860px; }
+  .preview-box video, .preview-box audio { width: 100%; border-radius: 8px; }
+  .preview-box iframe { width: 100%; height: 520px; border-radius: 8px; border: 1px solid var(--border); }
+
+  /* ── EMPTY ── */
+  .empty {
+    text-align: center; padding: 28px 20px;
+    color: var(--txt3); font-size: .83rem;
+    border: 1px dashed var(--border-hi); border-radius: 9px;
+    background: var(--surface2);
+  }
+  .empty .empty-ico { font-size: 2rem; margin-bottom: 8px; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface); color: var(--txt);
+    border: 1px solid var(--border-hi);
+    padding: 12px 22px; border-radius: 10px; font-size: .84rem;
+    z-index: 200; opacity: 0; transition: .3s;
+    box-shadow: 0 8px 32px rgba(0,0,0,.5); max-width: calc(100vw - 24px);
+    display: flex; align-items: center; gap: 10px;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast.ok   { border-color: rgba(77,222,128,.4); }
+  #toast.err  { border-color: rgba(248,113,113,.4); }
+  #toast.warn { border-color: rgba(251,146,60,.4); }
+
+  /* ── SPINNER ── */
+  .spin { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.2); border-top-color: currentColor; border-radius: 50%; animation: rot .7s linear infinite; display: inline-block; }
+  @keyframes rot { to { transform: rotate(360deg); } }
+
+  /* ── TOGGLE ── */
+  .toggle {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .78rem; color: var(--txt2); cursor: pointer;
+    padding: 8px 12px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 8px;
+    user-select: none; transition: .15s;
+  }
+  .toggle:hover { border-color: var(--border-hi); }
+  .toggle input { accent-color: var(--gold); width: 15px; height: 15px; flex-shrink: 0; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+  /* ════════════════════════════════════════════
+     ── RESPONSIVE (MOBILE / TABLETTE) ──
+     ════════════════════════════════════════════ */
+  @media (max-width: 860px) {
+    body { padding: 12px; font-size: 13.5px; }
+    .app { grid-template-columns: 1fr; gap: 12px; }
+    .col-side { order: 0; }
+    .app-header { flex-direction: column; align-items: stretch; gap: 12px; padding: 16px; }
+    .app-header .hdr-actions { justify-content: space-between; }
+    .app-header .logo { width: 36px; height: 36px; font-size: 1.15rem; }
+    .app-header h1 { font-size: .95rem; }
+    .panel { padding: 16px; }
+    .panel-title { font-size: .64rem; letter-spacing: 1.4px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .btn-row button { flex: 1 1 auto; justify-content: center; }
+    .storage-grid { grid-template-columns: 1fr 1fr; }
+    .player-controls audio { min-width: 0; width: 100%; flex: 1 1 100%; height: 36px; }
+    .modal { padding: 12px; }
+    .modal-box { padding: 20px 16px; max-height: 92vh; border-radius: 12px; }
+    .preview-box iframe { height: 60vh; }
+    .dropzone { padding: 22px 14px; }
+    .biblio-scroll { max-height: 340px; }
+  }
+
+  @media (max-width: 520px) {
+    body { padding: 8px; font-size: 13px; }
+    .app { gap: 10px; }
+    .app-header { padding: 13px; border-radius: 10px; }
+    .app-header h1 { font-size: .88rem; line-height: 1.35; }
+    .app-header .sub { font-size: .68rem; }
+    .app-header .hdr-actions { gap: 6px; }
+    .sync-badge { font-size: .68rem; padding: 5px 10px; }
+    .panel { padding: 13px; border-radius: 10px; }
+    .panel-title { margin-bottom: 12px; padding-bottom: 10px; }
+
+    .media-item { grid-template-columns: 44px minmax(0, 1fr); row-gap: 8px; padding: 10px; }
+    .media-thumb { width: 44px; height: 44px; font-size: 1.15rem; border-radius: 6px; }
+    .media-actions { grid-column: 1 / -1; justify-content: flex-end; }
+
+    .storage-grid { grid-template-columns: 1fr; }
+    .btn-row { gap: 6px; }
+    .btn-row button { width: 100%; }
+    .toggle { width: 100%; justify-content: center; }
+
+    .dropzone { padding: 18px 12px; }
+    .dropzone .dz-icon { font-size: 1.6rem; }
+    .dropzone .dz-txt { font-size: .82rem; }
+
+    .player-controls { gap: 8px; }
+    .player-controls button { flex: 0 0 auto; }
+    .verse-card { padding: 10px 12px; }
+    .verse-card .verse-ar { font-size: 1.05rem; line-height: 1.9; }
+
+    .modal { padding: 8px; }
+    .modal-box { padding: 16px 13px; border-radius: 12px; max-height: 94vh; }
+    .modal-box pre { font-size: .68rem; padding: 10px; }
+    .preview-box iframe { height: 50vh; }
+    .close-x { top: 10px; right: 10px; }
+
+    #toast {
+      bottom: 14px;
+      padding: 10px 16px;
+      font-size: .8rem;
+      width: calc(100vw - 16px);
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .app-header h1 { font-size: .82rem; }
+    .panel { padding: 11px; }
+    .btn-sm { padding: 5px 9px; font-size: .72rem; }
+    .chip { font-size: .68rem; padding: 4px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">📖</div>
+      <div>
+        <h1>Biblio — Coran & Ressources académiques</h1>
+        <div class="sub">Convertisseur · Stockage · Diffusion vers l'agent principal</div>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <span class="sync-badge" id="syncBadge">
+        <span class="sync-dot pulse"></span>
+        <span id="syncLabel">En ligne</span>
+      </span>
+      <button class="btn-sm" id="btnGuide">? Guide</button>
+    </div>
+  </header>
+
+  <!-- COL MAIN -->
+  <div class="col-main">
+
+    <!-- ① CONVERTIR SOURATE -->
+    <div class="panel">
+      <div class="panel-title">① Convertir une sourate</div>
+      <div class="form-grid">
+        <div class="field"><label>Sourate</label><select id="selSurah"></select></div>
+        <div class="field"><label>Traduction</label>
+          <select id="selLang">
+            <option value="fr.hamidullah">🇫🇷 Français — Hamidullah</option>
+            <option value="en.sahih">🇬🇧 Anglais — Sahih Intl.</option>
+            <option value="es.cortes">🇪🇸 Espagnol — Cortes</option>
+            <option value="de.aburida">🇩🇪 Allemand — Abu Rida</option>
+            <option value="tr.diyanet">🇹🇷 Turc — Diyanet</option>
+            <option value="ru.kuliev">🇷🇺 Russe — Kuliev</option>
+            <option value="id.indonesian">🇮🇩 Indonésien</option>
+            <option value="ur.jalandhry">🇵🇰 Ourdou — Jalandhry</option>
+            <option value="ha.gumi">🇳🇬 Haoussa — Gumi</option>
+            <option value="sw.barwani">🇰🇪 Swahili — Barwani</option>
+          </select>
+        </div>
+        <div class="field"><label>Récitateur</label>
+          <select id="selReciter">
+            <option value="ar.alafasy">Mishary Alafasy</option>
+            <option value="ar.abdulbasitmurattal">Abdul Basit (Murattal)</option>
+            <option value="ar.abdurrahmaansudais">Abdurrahman As-Sudais</option>
+            <option value="ar.husary">Al-Husary</option>
+            <option value="ar.minshawi">Al-Minshawi</option>
+            <option value="ar.muhammadayyoub">Muhammad Ayyoub</option>
+            <option value="ar.shaatree">Abu Bakr Ash-Shaatree</option>
+            <option value="ar.ahmedajamy">Ahmed Al-Ajamy</option>
+          </select>
+        </div>
+      </div>
+      <div class="progress-wrap" id="convertProgress">
+        <div class="progress-bar"><div class="progress-fill" id="convertFill" style="width:0%"></div></div>
+        <div class="progress-label" id="convertLabel">Chargement…</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-gold" id="btnConvert">⚡ Convertir et stocker</button>
+      </div>
+    </div>
+
+    <!-- ② RESSOURCES ACADÉMIQUES -->
+    <div class="panel">
+      <div class="panel-title">② Ressources académiques externes</div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dz-icon">📄 🎵 🎬 📚</div>
+        <div class="dz-txt">Glissez vos fichiers ici ou <b>cliquez pour parcourir</b></div>
+        <div class="dz-hint">PDF · DOC · DOCX · TXT · EPUB · MP3 · MP4 · WEBM · WAV</div>
+        <input type="file" id="mediaInput" accept=".pdf,.doc,.docx,.txt,.epub,.md,audio/*,video/*" multiple hidden>
+      </div>
+
+      <div class="progress-wrap" id="uploadProgress">
+        <div class="progress-bar"><div class="progress-fill" id="uploadFill" style="width:0%"></div></div>
+        <div class="progress-label" id="uploadLabel">Ajout en cours…</div>
+      </div>
+
+      <div class="filters" id="filters" style="display:none">
+        <span class="chip active" data-f="all">Tout</span>
+        <span class="chip" data-f="document">📄 Documents</span>
+        <span class="chip" data-f="book">📚 Livres</span>
+        <span class="chip" data-f="audio">🎵 Audio</span>
+        <span class="chip" data-f="video">🎬 Vidéo</span>
+      </div>
+
+      <div class="media-list" id="mediaList"></div>
+
+      <div class="btn-row" id="mediaActions" style="display:none">
+        <label class="toggle">
+          <input type="checkbox" id="optEmbed">
+          <span>Exporter en autonome (base64)</span>
+        </label>
+        <button class="btn-teal" id="btnAddMedia">➕ Tout ajouter à la biblio</button>
+        <button class="btn-sm" id="btnClearMedia">✕ Vider</button>
+      </div>
+    </div>
+
+    <!-- ③ MINI-LECTEUR SOURATE -->
+    <div class="panel" id="panelPlayer" style="display:none">
+      <div class="panel-title">▶ Lecture — <span id="playerSurahName"></span></div>
+      <div class="surah-player show" id="surahPlayer">
+        <div class="player-controls">
+          <audio id="mainAudio" controls></audio>
+          <button class="btn-sm" id="btnPrevVerse">⏮</button>
+          <span id="verseCounter" style="font-size:.72rem;color:var(--txt2)">v. 1</span>
+          <button class="btn-sm" id="btnNextVerse">⏭</button>
+          <button class="btn-sm btn-blue" id="btnAutoPlay">▶ Auto</button>
+        </div>
+        <div class="verse-list" id="verseList"></div>
+      </div>
+    </div>
+
+    <!-- ④ EXPORT / IMPORT -->
+    <div class="panel">
+      <div class="panel-title">④ Export / Import</div>
+
+      <div class="export-target">
+        <label>URL de l'agent principal (pour injection directe)</label>
+        <input type="text" id="agentUrl" placeholder="https://mon-agent.example.com" value="">
+        <div class="hint">Si remplie, les nouveaux éléments seront poussés en temps réel via postMessage et BroadcastChannel.</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-blue" id="btnExport">📤 Exporter data.json</button>
+        <button class="btn-blue" id="btnImport">📥 Importer data.json</button>
+        <button class="btn-purple" id="btnPushAgent">🚀 Pousser vers l'agent</button>
+        <button class="btn-red" id="btnClear">🗑 Vider la biblio</button>
+        <input type="file" id="fileInput" accept=".json" hidden>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COL SIDE -->
+  <div class="col-side">
+
+    <!-- BIBLIO -->
+    <div class="panel" style="flex:1">
+      <div class="panel-title">
+        Biblio partagée
+        <span class="badge-count" id="biblioCount">0</span>
+      </div>
+
+      <div class="filters">
+        <span class="chip active" data-bf="all">Tout</span>
+        <span class="chip" data-bf="quran">📖 Coran</span>
+        <span class="chip" data-bf="media">📁 Médias</span>
+      </div>
+
+      <div class="biblio-scroll" id="biblioList"></div>
+
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn-sm btn-gold" id="btnSaveNow">💾 Synchroniser</button>
+        <button class="btn-sm" id="btnReloadStorage">🔄 Recharger</button>
+      </div>
+    </div>
+
+    <!-- STOCKAGE -->
+    <div class="panel">
+      <div class="panel-title">Stockage</div>
+      <div class="storage-grid" id="storageGrid"></div>
+    </div>
+
+  </div>
+
+</div><!-- /app -->
+
+<!-- MODAL GUIDE -->
+<div class="modal" id="modalGuide">
+  <div class="modal-box">
+    <button class="btn-sm close-x" id="btnCloseGuide">✕</button>
+    <h3>📖 Guide d'utilisation</h3>
+    <h4>① Convertir une sourate</h4>
+    <ol>
+      <li>Choisir sourate, langue et récitateur.</li>
+      <li>Cliquer <code>⚡ Convertir</code>. L'API alquran.cloud est appelée.</li>
+      <li>La sourate est stockée (métadonnées en localStorage, blobs en IndexedDB).</li>
+      <li>Cliquer sur la sourate dans la biblio pour la lire verset par verset.</li>
+    </ol>
+    <h4>② Ressources académiques</h4>
+    <ol>
+      <li>Glisser-déposer PDF, audio ou vidéo dans la zone.</li>
+      <li>Modifier le titre si besoin, tester avec 🔍.</li>
+      <li>Cliquer <code>➕ Tout ajouter</code>.</li>
+    </ol>
+    <h4>③ Synchronisation avec l'agent principal</h4>
+    <ul>
+      <li><b>BroadcastChannel</b> : synchronisation automatique dans le même navigateur.</li>
+      <li><b>postMessage</b> : si l'agent est dans un iframe ou fenêtre fille.</li>
+      <li><b>🚀 Pousser</b> : envoie la biblio complète (URL ou <code>*</code>).</li>
+    </ul>
+    <h4>④ Stockage</h4>
+    <ul>
+      <li><b>IndexedDB</b> : fichiers (blobs) — quota réel affiché dans la barre « Stockage navigateur ».</li>
+      <li><b>localStorage</b> : métadonnées uniquement — plafond navigateur ~5 Mo.</li>
+    </ul>
+    <h4>⑤ Structure data.json</h4>
+    <pre>[
+  { "type":"quran","surah":1,"name":"Al-Fatiha","lang":"fr",
+    "verses":[{"num":1,"ar":"…","trans":"…","audio":"…"}] },
+  { "type":"media","kind":"audio","title":"Cours 1",
+    "filename":"cours1.mp3","size":1234567,"embed":false }
+]</pre>
+  </div>
+</div>
+
+<!-- MODAL PREVIEW -->
+<div class="modal" id="modalPreview">
+  <div class="modal-box preview-box">
+    <button class="btn-sm close-x" id="btnClosePreview">✕</button>
+    <h3 id="previewTitle">Aperçu</h3>
+    <div id="previewBody"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   BIBLIO PARTAGÉE  — IndexedDB (blobs) + localStorage (méta)
+   + BroadcastChannel + postMessage
+   ============================================================ */
+(function(){
+  const DB   = 'tossara_biblio_v2';
+  const STORE= 'fichiers';
+  const META = 'biblio_meta_v2';
+  let   _db  = null;
+
+  const canal = ('BroadcastChannel' in window)
+    ? new BroadcastChannel('tossara_biblio_canal') : null;
+
+  function diffuser(payload){ if(canal) canal.postMessage(payload); }
+
+  if(canal) canal.onmessage = ev => {
+    if(ev.data && ev.data.type === 'maj') window.dispatchEvent(new CustomEvent('biblio:maj', { detail: ev.data }));
+  };
+
+  /* Migration ancienne clé */
+  ['quran_biblio_data','biblio_meta'].forEach(k=>{ try{ localStorage.removeItem(k); }catch(e){} });
+
+  function ouvrir(){
+    return new Promise((res,rej)=>{
+      if(_db) return res(_db);
+      const r = indexedDB.open(DB, 1);
+      r.onupgradeneeded = e => {
+        const db = e.target.result;
+        if(!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE,{keyPath:'id'});
+      };
+      r.onsuccess = e => { _db = e.target.result; res(_db); };
+      r.onerror   = e => rej(e.target.error);
+    });
+  }
+
+  async function putBlob(id,blob){
+    const db = await ouvrir();
+    return new Promise((res,rej)=>{
+      const tx = db.transaction(STORE,'readwrite');
+      tx.objectStore(STORE).put({id,blob});
+      tx.oncomplete = ()=>res(); tx.onerror=()=>rej(tx.error);
+    });
+  }
+  async function getBlob(id){
+    const db = await ouvrir();
+    return new Promise((res,rej)=>{
+      const tx = db.transaction(STORE,'readonly');
+      const r  = tx.objectStore(STORE).get(id);
+      r.onsuccess = ()=>res(r.result?r.result.blob:null); r.onerror=()=>rej(r.error);
+    });
+  }
+  async function delBlob(id){
+    const db = await ouvrir();
+    return new Promise((res,rej)=>{
+      const tx = db.transaction(STORE,'readwrite');
+      tx.objectStore(STORE).delete(id);
+      tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error);
+    });
+  }
+
+  function lireMeta(){ try{ return JSON.parse(localStorage.getItem(META)||'[]'); }catch{ return []; } }
+  function ecrireMeta(data){
+    const s=JSON.stringify(data);
+    try{ localStorage.setItem(META,s); return {ok:true,size:s.length}; }
+    catch(e){ return {ok:false,err:e.name==='QuotaExceededError'?'QUOTA':e.message}; }
+  }
+
+  window.BiblioPartagee = {
+    lister(){ return lireMeta(); },
+    tailleMeta(){ try{ return (localStorage.getItem(META)||'').length; }catch{ return 0; } },
+
+    async ajouter(item){
+      const meta = lireMeta();
+      const id   = 'bib_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+      const entree = {
+        id, titre: item.titre||'Sans titre', type: item.type||'document',
+        sousType: item.sousType||'', date: new Date().toISOString(),
+        taille: item.blob?item.blob.size:(item.data?JSON.stringify(item.data).length:0),
+        aBlob: !!item.blob, mime: item.mime||'',
+        data: item.blob?null:(item.data||null), extra: item.extra||{}
+      };
+      if(item.blob) await putBlob(id,item.blob);
+      meta.push(entree);
+      const r = ecrireMeta(meta);
+      if(!r.ok){ if(item.blob) await delBlob(id); throw new Error(r.err==='QUOTA'?'Stockage saturé. Exportez puis videz la biblio.':r.err); }
+      window.dispatchEvent(new CustomEvent('biblio:maj'));
+      diffuser({type:'maj',action:'ajouter',id,titre:entree.titre,ts:Date.now()});
+      return entree;
+    },
+
+    async recupererBlob(id){ return await getBlob(id); },
+    async obtenirURL(id){
+      const meta=lireMeta().find(m=>m.id===id);
+      if(!meta) return null;
+      if(meta.aBlob){ const b=await getBlob(id); return b?URL.createObjectURL(b):null; }
+      if(meta.data?.audio) return meta.data.audio;
+      if(meta.data?.src)   return meta.data.src;
+      return null;
+    },
+
+    async supprimer(id){
+      ecrireMeta(lireMeta().filter(m=>m.id!==id));
+      await delBlob(id);
+      window.dispatchEvent(new CustomEvent('biblio:maj'));
+      diffuser({type:'maj',action:'supprimer',id,ts:Date.now()});
+    },
+
+    async vider(){
+      const meta=lireMeta();
+      for(const m of meta) await delBlob(m.id);
+      try{ localStorage.removeItem(META); }catch(e){}
+      window.dispatchEvent(new CustomEvent('biblio:maj'));
+      diffuser({type:'maj',action:'vider',ts:Date.now()});
+    },
+
+    notifier(){ diffuser({type:'maj',action:'sync',ts:Date.now()}); },
+
+    /* Sérialise pour postMessage / export */
+    async serialiser(){
+      const items=lireMeta(); const out=[];
+      for(const it of items){
+        if(it.type==='coran'&&it.data){ out.push(it.data); continue; }
+        if(it.type==='media'){
+          const extra=it.extra||{};
+          const embed=extra.embed===true;
+          let src='';
+          if(embed&&it.aBlob){
+            const blob=await getBlob(it.id);
+            if(blob) src=await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(blob);});
+          }
+          out.push({type:'media',kind:it.sousType,title:it.titre,filename:extra.filename||it.titre,mime:it.mime||'',size:it.taille,duration:extra.duration||null,src:src||extra.filename||it.titre,embed:src.startsWith('data:')});
+        }
+      }
+      return out;
+    }
+  };
+})();
+
+/* ========== CONSTANTES ========== */
+const SURAHS = [
+  "Al-Fatiha","Al-Baqara","Al-Imran","An-Nisa","Al-Ma'ida","Al-An'am","Al-A'raf",
+  "Al-Anfal","At-Tawba","Yunus","Hud","Yusuf","Ar-Ra'd","Ibrahim","Al-Hijr",
+  "An-Nahl","Al-Isra","Al-Kahf","Maryam","Ta-Ha","Al-Anbiya","Al-Hajj",
+  "Al-Mu'minun","An-Nur","Al-Furqan","Ash-Shu'ara","An-Naml","Al-Qasas",
+  "Al-Ankabut","Ar-Rum","Luqman","As-Sajda","Al-Ahzab","Saba","Fatir","Ya-Sin",
+  "As-Saffat","Sad","Az-Zumar","Ghafir","Fussilat","Ash-Shura","Az-Zukhruf",
+  "Ad-Dukhan","Al-Jathiya","Al-Ahqaf","Muhammad","Al-Fath","Al-Hujurat","Qaf",
+  "Adh-Dhariyat","At-Tur","An-Najm","Al-Qamar","Ar-Rahman","Al-Waqi'a",
+  "Al-Hadid","Al-Mujadila","Al-Hashr","Al-Mumtahana","As-Saff","Al-Jumu'a",
+  "Al-Munafiqun","At-Taghabun","At-Talaq","At-Tahrim","Al-Mulk","Al-Qalam",
+  "Al-Haqqa","Al-Ma'arij","Nuh","Al-Jinn","Al-Muzzammil","Al-Muddaththir",
+  "Al-Qiyama","Al-Insan","Al-Mursalat","An-Naba","An-Nazi'at","Abasa",
+  "At-Takwir","Al-Infitar","Al-Mutaffifin","Al-Inshiqaq","Al-Buruj","At-Tariq",
+  "Al-A'la","Al-Ghashiya","Al-Fajr","Al-Balad","Ash-Shams","Al-Layl","Ad-Duha",
+  "Ash-Sharh","At-Tin","Al-Alaq","Al-Qadr","Al-Bayyina","Az-Zalzala","Al-Adiyat",
+  "Al-Qari'a","At-Takathur","Al-Asr","Al-Humaza","Al-Fil","Quraysh","Al-Ma'un",
+  "Al-Kawthar","Al-Kafirun","An-Nasr","Al-Masad","Al-Ikhlas","Al-Falaq","An-Nas"
+];
+
+let pendingMedia = [], currentFilter = 'all', biblioFilter = 'all';
+let currentSurahData = null, currentVerseIdx = 0, autoPlaying = false;
+let toastTimer;
+
+/* ========== UTILS ========== */
+function fmtSize(b){
+  if(b === null || b === undefined) return '—';
+  if(b < 1024) return b + ' o';
+  if(b < 1048576) return (b / 1024).toFixed(1) + ' Ko';
+  if(b < 1073741824) return (b / 1048576).toFixed(2) + ' Mo';
+  return (b / 1073741824).toFixed(2) + ' Go';
+}
+function fmtDur(s){ if(!s||!isFinite(s)) return '—'; return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`; }
+function kindIcon(k){ return {document:'📄',book:'📚',audio:'🎵',video:'🎬'}[k]||'📁'; }
+function classify(file){
+  const n=file.name.toLowerCase(), m=(file.type||'').toLowerCase();
+  if(m.startsWith('video/')||/\.(mp4|webm|mov|mkv|avi)$/.test(n)) return 'video';
+  if(m.startsWith('audio/')||/\.(mp3|wav|m4a|ogg|flac|aac)$/.test(n)) return 'audio';
+  if(/\.epub$/.test(n)) return 'book';
+  if(/\.(pdf|doc|docx|txt|md|rtf|odt)$/.test(n)) return 'document';
+  return null;
+}
+
+function toast(msg, type='ok'){
+  const t = document.getElementById('toast');
+  const icons = {ok:'✅',err:'❌',warn:'⚠️'};
+  t.innerHTML = `<span>${icons[type]||''}</span><span>${msg}</span>`;
+  t.className = 'show '+type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.classList.remove('show'); }, 3400);
+}
+
+/* ========== SYNC STATUS ========== */
+function setSyncStatus(state){
+  const badge=document.getElementById('syncBadge'), lbl=document.getElementById('syncLabel');
+  badge.className='sync-badge'+(state==='err'?' err':state==='warn'?' warn':'');
+  badge.querySelector('.sync-dot').className='sync-dot'+(state==='ok'?' pulse':'');
+  lbl.textContent = state==='ok'?'En ligne':state==='warn'?'En attente':'Hors ligne';
+}
+
+/* ========== FILL SURAH SELECT ========== */
+function fillSurahSelect(){
+  const sel=document.getElementById('selSurah');
+  SURAHS.forEach((n,i)=>{ const o=document.createElement('option'); o.value=i+1; o.textContent=`${String(i+1).padStart(3,'0')} — ${n}`; sel.appendChild(o); });
+}
+
+/* ========== CONVERT SURAH ========== */
+async function convertSurah(num, lang, rec){
+  const progress = document.getElementById('convertProgress');
+  const fill     = document.getElementById('convertFill');
+  const label    = document.getElementById('convertLabel');
+  progress.classList.add('show');
+  fill.style.width = '20%'; label.textContent = 'Appel de l\'API…';
+
+  const url = `https://api.alquran.cloud/v1/surah/${num}/editions/${rec},${lang}`;
+  const res = await fetch(url);
+  fill.style.width = '60%'; label.textContent = 'Traitement…';
+  if(!res.ok) throw new Error('API indisponible ('+res.status+')');
+  const data = await res.json();
+  if(data.code!==200) throw new Error(data.status||'Erreur API');
+  const arabic=data.data[0], trans=data.data[1];
+  const verses=arabic.ayahs.map((a,i)=>({
+    num: a.numberInSurah, ar: a.text,
+    trans: trans.ayahs[i]?trans.ayahs[i].text:'',
+    audio: a.audio||''
+  }));
+  fill.style.width = '100%'; label.textContent = 'Fait !';
+  setTimeout(()=>progress.classList.remove('show'), 800);
+  return { type:'quran', surah:num, name:SURAHS[num-1]||arabic.englishName, lang:lang.split('.')[0], langEdition:lang, reciter:rec, verses };
+}
+
+/* ========== RENDER BIBLIO ========== */
+function renderBiblio(){
+  const list = document.getElementById('biblioList');
+  const count = document.getElementById('biblioCount');
+  let items = window.BiblioPartagee.lister();
+  if(biblioFilter==='quran')  items=items.filter(x=>x.type==='coran');
+  if(biblioFilter==='media')  items=items.filter(x=>x.type==='media');
+  count.textContent = window.BiblioPartagee.lister().length;
+
+  if(items.length===0){
+    list.innerHTML = `<div class="empty"><div class="empty-ico">${biblioFilter==='quran'?'📖':biblioFilter==='media'?'📁':'🗂'}</div>Biblio vide</div>`;
+    return;
+  }
+  list.innerHTML='';
+  items.forEach(item=>{
+    const div=document.createElement('div');
+    div.className='bib-item';
+
+    if(item.type==='media'){
+      const k=item.sousType||'document';
+      const badgeClass={audio:'audio',video:'video',document:'doc',book:'book'}[k]||'';
+      div.innerHTML=`<span class="bib-ico">${kindIcon(k)}</span>
+        <div class="bib-meta">
+          <div class="bib-title">${item.titre}</div>
+          <div class="bib-sub">${fmtSize(item.taille)} · ${item.extra?.filename||''}</div>
+        </div>
+        <span class="bib-badge ${badgeClass}">${k.toUpperCase()}</span>
+        <button class="bib-del" data-del="${item.id}" title="Supprimer">✕</button>`;
+      div.addEventListener('click', async e=>{
+        if(e.target.dataset.del) return;
+        const url=await window.BiblioPartagee.obtenirURL(item.id);
+        if(url) openPreviewUrl(item,url);
+      });
+    } else {
+      const s=item.data||{}; const nbV=s.verses?s.verses.length:0;
+      const recShort=(s.reciter||'').replace('ar.','');
+      div.innerHTML=`<span class="bib-ico">📖</span>
+        <div class="bib-meta">
+          <div class="bib-title">${s.surah||''}. ${s.name||SURAHS[(s.surah||1)-1]||''}</div>
+          <div class="bib-sub">${nbV} versets · ${recShort}</div>
+        </div>
+        <span class="bib-badge">${(s.lang||'??').toUpperCase()}</span>
+        <button class="bib-del" data-del="${item.id}" title="Supprimer">✕</button>`;
+      div.addEventListener('click', e=>{
+        if(e.target.dataset.del) return;
+        openSurahPlayer(item.data);
+      });
+    }
+    div.querySelector('.bib-del').addEventListener('click', async e=>{
+      e.stopPropagation();
+      await window.BiblioPartagee.supprimer(e.target.dataset.del);
+      renderBiblio(); renderStorage();
+      toast('Élément supprimé','warn');
+    });
+    list.appendChild(div);
+  });
+}
+
+/* ========== MINI-LECTEUR SOURATE ========== */
+function openSurahPlayer(data){
+  if(!data||!data.verses) return;
+  currentSurahData=data; currentVerseIdx=0; autoPlaying=false;
+  document.getElementById('panelPlayer').style.display='block';
+  document.getElementById('playerSurahName').textContent=data.surah+'. '+data.name;
+  document.getElementById('btnAutoPlay').textContent='▶ Auto';
+  renderVerseList();
+  loadVerse(0);
+}
+
+function renderVerseList(){
+  const vl=document.getElementById('verseList'); vl.innerHTML='';
+  currentSurahData.verses.forEach((v,i)=>{
+    const d=document.createElement('div');
+    d.className='verse-card'+(i===currentVerseIdx?' playing':'');
+    d.innerHTML=`<div class="verse-ar">${v.ar}</div>
+      <div class="verse-trans">${v.trans}</div>
+      <div class="verse-num">Verset ${v.num}</div>`;
+    d.addEventListener('click',()=>{ currentVerseIdx=i; loadVerse(i); });
+    vl.appendChild(d);
+  });
+}
+
+function loadVerse(idx){
+  const v=currentSurahData.verses[idx];
+  if(!v) return;
+  const audio=document.getElementById('mainAudio');
+  document.getElementById('verseCounter').textContent='v. '+v.num;
+  document.querySelectorAll('.verse-card').forEach((el,i)=>{
+    el.classList.toggle('playing',i===idx);
+    if(i===idx) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  });
+  if(v.audio){ audio.src=v.audio; audio.play().catch(()=>{}); }
+}
+
+document.getElementById('mainAudio').addEventListener('ended',()=>{
+  if(!autoPlaying||!currentSurahData) return;
+  if(currentVerseIdx<currentSurahData.verses.length-1){
+    currentVerseIdx++; loadVerse(currentVerseIdx); renderVerseList();
+  } else { autoPlaying=false; document.getElementById('btnAutoPlay').textContent='▶ Auto'; }
+});
+
+document.getElementById('btnPrevVerse').addEventListener('click',()=>{
+  if(!currentSurahData||currentVerseIdx===0) return;
+  currentVerseIdx--; loadVerse(currentVerseIdx); renderVerseList();
+});
+document.getElementById('btnNextVerse').addEventListener('click',()=>{
+  if(!currentSurahData||currentVerseIdx>=currentSurahData.verses.length-1) return;
+  currentVerseIdx++; loadVerse(currentVerseIdx); renderVerseList();
+});
+document.getElementById('btnAutoPlay').addEventListener('click',()=>{
+  autoPlaying=!autoPlaying;
+  document.getElementById('btnAutoPlay').textContent=autoPlaying?'⏹ Stop':'▶ Auto';
+  if(autoPlaying) loadVerse(currentVerseIdx);
+});
+
+/* ========== RENDER STORAGE (quota réel du navigateur) ========== */
+async function renderStorage(){
+  const grid  = document.getElementById('storageGrid');
+  const items = window.BiblioPartagee.lister();
+  const metaB = window.BiblioPartagee.tailleMeta();
+
+  /* ─── Quota réel du navigateur (Storage API) ─── */
+  let quotaB = 0, usageB = 0, supported = false;
+  if(navigator.storage && navigator.storage.estimate){
+    try{
+      const est = await navigator.storage.estimate();
+      quotaB    = est.quota || 0;
+      usageB    = est.usage || 0;
+      supported = quotaB > 0;
+    }catch(e){}
+  }
+  /* Fallback si non supporté (vieux navigateurs) */
+  if(!supported){
+    quotaB = 5 * 1024 * 1024 * 1024; // 5 Go par défaut
+    usageB = items.reduce((a,it)=>a+(it.taille||0),0) + metaB;
+  }
+
+  const quotaPct   = quotaB ? Math.min(100, (usageB / quotaB) * 100) : 0;
+  const quotaColor = quotaPct > 80 ? 'var(--red)'
+                   : quotaPct > 50 ? 'var(--orange)'
+                   : 'var(--teal)';
+
+  const blobB = items.reduce((a,it)=>a+(it.aBlob?(it.taille||0):0),0);
+  const dataB = items.reduce((a,it)=>{
+    if(!it.aBlob && it.data){ try{ return a + JSON.stringify(it.data).length; }catch{} }
+    return a;
+  },0);
+  const q = items.filter(x=>x.type==='coran').length;
+  const m = items.filter(x=>x.type==='media').length;
+
+  grid.innerHTML = `
+    <div class="storage-cell">
+      <div class="sc-label">Stockage navigateur${supported ? '' : ' (estimé)'}</div>
+      <div class="sc-val">${fmtSize(usageB)}</div>
+      <div class="sc-sub">sur ${fmtSize(quotaB)} disponibles</div>
+      <div class="bar"><div class="bar-fill" style="width:${quotaPct}%;background:${quotaColor}"></div></div>
+    </div>
+    <div class="storage-cell">
+      <div class="sc-label">Index (localStorage)</div>
+      <div class="sc-val">${fmtSize(metaB)}</div>
+      <div class="sc-sub">métadonnées · plafond ~5 Mo</div>
+    </div>
+    <div class="storage-cell">
+      <div class="sc-label">Blobs (IndexedDB)</div>
+      <div class="sc-val">${fmtSize(blobB)}</div>
+      <div class="sc-sub">fichiers stockés</div>
+    </div>
+    <div class="storage-cell">
+      <div class="sc-label">Données texte</div>
+      <div class="sc-val">${fmtSize(dataB)}</div>
+      <div class="sc-sub">versets JSON</div>
+    </div>
+    <div class="storage-cell">
+      <div class="sc-label">Éléments</div>
+      <div class="sc-val">${items.length}</div>
+      <div class="sc-sub">${q} sourates · ${m} médias</div>
+    </div>`;
+}
+
+/* ========== PENDING MEDIA ========== */
+function handleFiles(files){
+  Array.from(files).forEach(file=>{
+    const kind=classify(file);
+    if(!kind){ toast('Format non supporté : '+file.name,'warn'); return; }
+    const item={
+      id:'m_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+      file, kind, title:file.name.replace(/\.[^.]+$/,''),
+      filename:file.name, mime:file.type||'application/octet-stream',
+      size:file.size, duration:null, previewUrl:URL.createObjectURL(file)
+    };
+    if(kind==='audio'||kind==='video'){
+      const el=document.createElement(kind); el.preload='metadata'; el.src=item.previewUrl;
+      el.addEventListener('loadedmetadata',()=>{ item.duration=el.duration; renderPending(); });
+    }
+    pendingMedia.push(item);
+  });
+  renderPending();
+}
+
+function renderPending(){
+  const list=document.getElementById('mediaList');
+  const actions=document.getElementById('mediaActions');
+  const filters=document.getElementById('filters');
+  if(pendingMedia.length===0){ list.innerHTML=''; actions.style.display='none'; filters.style.display='none'; return; }
+  actions.style.display='flex'; filters.style.display='flex';
+  const visible=currentFilter==='all'?pendingMedia:pendingMedia.filter(m=>m.kind===currentFilter);
+  list.innerHTML='';
+  if(!visible.length){ list.innerHTML='<div class="empty">Aucun fichier dans cette catégorie.</div>'; return; }
+  visible.forEach(item=>{
+    const div=document.createElement('div'); div.className='media-item';
+    const thumb=item.kind==='video'?`<video src="${item.previewUrl}" muted preload="metadata"></video>`:kindIcon(item.kind);
+    div.innerHTML=`<div class="media-thumb">${thumb}</div>
+      <div class="media-info">
+        <div class="fname">${item.filename}</div>
+        <div class="fmeta">${kindIcon(item.kind)} ${item.kind.toUpperCase()} · ${fmtSize(item.size)}${item.duration!==null?' · '+fmtDur(item.duration):''}</div>
+        <input type="text" value="${item.title.replace(/"/g,'&quot;')}" data-tid="${item.id}">
+      </div>
+      <div class="media-actions">
+        <button class="btn-sm btn-blue" data-test="${item.id}">🔍</button>
+        <button class="btn-sm btn-red" data-rm="${item.id}">✕</button>
+      </div>`;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('[data-tid]').forEach(inp=>inp.addEventListener('input',()=>{ const it=pendingMedia.find(m=>m.id===inp.dataset.tid); if(it) it.title=inp.value; }));
+  list.querySelectorAll('[data-rm]').forEach(btn=>btn.addEventListener('click',()=>{ const i=pendingMedia.findIndex(m=>m.id===btn.dataset.rm); if(i>=0){ URL.revokeObjectURL(pendingMedia[i].previewUrl); pendingMedia.splice(i,1); renderPending(); } }));
+  list.querySelectorAll('[data-test]').forEach(btn=>btn.addEventListener('click',()=>{ const it=pendingMedia.find(m=>m.id===btn.dataset.test); if(it) openPreviewMedia(it); }));
+}
+
+document.getElementById('filters').addEventListener('click',e=>{
+  const chip=e.target.closest('.chip[data-f]'); if(!chip) return;
+  document.querySelectorAll('.chip[data-f]').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active'); currentFilter=chip.dataset.f; renderPending();
+});
+
+/* BIBLIO FILTER */
+document.addEventListener('click', e=>{
+  const chip=e.target.closest('.chip[data-bf]'); if(!chip) return;
+  document.querySelectorAll('.chip[data-bf]').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active'); biblioFilter=chip.dataset.bf; renderBiblio();
+});
+
+/* ========== PREVIEW ========== */
+function openPreviewMedia(item){
+  openPreviewUrl(item, item.previewUrl);
+}
+function openPreviewUrl(item, url){
+  const modal=document.getElementById('modalPreview');
+  const title=document.getElementById('previewTitle');
+  const body=document.getElementById('previewBody');
+  title.textContent=`${kindIcon(item.sousType||item.kind||'document')} ${item.titre||item.title}`;
+  body.innerHTML='';
+  const k=item.sousType||item.kind||'';
+  const fname=(item.extra?.filename||item.filename||'').toLowerCase();
+  if(k==='video') body.innerHTML=`<video controls autoplay playsinline src="${url}"></video>`;
+  else if(k==='audio') body.innerHTML=`<audio controls autoplay src="${url}" style="width:100%;margin-top:10px"></audio>`;
+  else if(/\.pdf$/i.test(fname)||item.mime==='application/pdf') body.innerHTML=`<iframe src="${url}"></iframe>`;
+  else body.innerHTML=`<div style="text-align:center;padding:40px;color:var(--txt2)"><div style="font-size:3rem;margin-bottom:12px">${kindIcon(k)}</div><p style="font-weight:600">${fname}</p><p style="margin-top:8px">${fmtSize(item.taille||item.size)}</p></div>`;
+  modal.classList.add('open');
+}
+
+/* ========== COMMIT MEDIA ========== */
+async function commitMedia(){
+  if(!pendingMedia.length){ toast('Aucun fichier en attente.','warn'); return; }
+  const embed=document.getElementById('optEmbed').checked;
+  const btn=document.getElementById('btnAddMedia');
+  const orig=btn.innerHTML; btn.disabled=true;
+  const prog=document.getElementById('uploadProgress');
+  const fill=document.getElementById('uploadFill');
+  const lbl=document.getElementById('uploadLabel');
+  prog.classList.add('show');
+  let ok=0,fail=0;
+
+  for(let i=0;i<pendingMedia.length;i++){
+    const item=pendingMedia[i];
+    fill.style.width=((i/pendingMedia.length)*100)+'%';
+    lbl.textContent=`Ajout ${i+1}/${pendingMedia.length} : ${item.filename}`;
+    try{
+      await window.BiblioPartagee.ajouter({
+        titre:item.title||item.filename, type:'media', sousType:item.kind,
+        blob:item.file, mime:item.mime,
+        extra:{ filename:item.filename, duration:item.duration!==null?+item.duration.toFixed(2):null, embed }
+      });
+      ok++;
+    }catch(err){ fail++; toast('❌ '+err.message,'err'); }
+  }
+
+  fill.style.width='100%'; lbl.textContent='Terminé.';
+  setTimeout(()=>prog.classList.remove('show'),800);
+  pendingMedia.forEach(m=>URL.revokeObjectURL(m.previewUrl));
+  pendingMedia=[]; renderPending(); renderBiblio(); renderStorage();
+  btn.disabled=false; btn.innerHTML=orig;
+  toast(`${ok} fichier(s) ajouté(s)${fail?', '+fail+' échec(s)':''}`, fail?'warn':'ok');
+}
+
+/* ========== EXPORT ========== */
+async function exportJSON(){
+  const items=window.BiblioPartagee.lister();
+  if(!items.length){ toast('Biblio vide','warn'); return; }
+  const btn=document.getElementById('btnExport');
+  const orig=btn.innerHTML; btn.disabled=true; btn.innerHTML='<span class="spin"></span> Export…';
+  const data=await window.BiblioPartagee.serialiser();
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click();
+  btn.disabled=false; btn.innerHTML=orig;
+  toast('data.json exporté');
+}
+
+/* ========== IMPORT ========== */
+function importJSON(file){
+  const reader=new FileReader();
+  reader.onload=async e=>{
+    try{
+      let parsed=JSON.parse(e.target.result);
+      if(!Array.isArray(parsed)) parsed=[parsed];
+      let ok=0,skip=0;
+      for(const item of parsed){
+        if(!item||typeof item!=='object'){ skip++; continue; }
+        if(item.type==='quran'||(item.surah&&item.verses)){
+          await window.BiblioPartagee.ajouter({titre:`Sourate ${item.surah} (${(item.lang||'??').toUpperCase()})`,type:'coran',sousType:'json',data:item});
+          ok++;
+        } else if(item.type==='media'){
+          let blobToStore=null;
+          if(item.src&&item.src.startsWith('data:')){
+            try{ const r=await fetch(item.src); blobToStore=await r.blob(); }catch(e){}
+          }
+          await window.BiblioPartagee.ajouter({
+            titre:item.title||item.filename||'Média', type:'media', sousType:item.kind||'document',
+            blob:blobToStore, data:blobToStore?null:{src:item.src}, mime:item.mime||'',
+            extra:{filename:item.filename,duration:item.duration,embed:!!item.embed}
+          });
+          ok++;
+        } else skip++;
+      }
+      renderBiblio(); renderStorage();
+      toast(`${ok} importé(s) · ${skip} ignoré(s)`);
+    }catch(err){ toast('JSON invalide : '+err.message,'err'); }
+  };
+  reader.readAsText(file);
+}
+
+/* ========== PUSH VERS AGENT ========== */
+async function pushToAgent(){
+  const url=document.getElementById('agentUrl').value.trim();
+  const data=await window.BiblioPartagee.serialiser();
+  const msg={type:'biblio:push',source:'tossara_convertisseur',data,ts:Date.now()};
+
+  if(window.BiblioPartagee._diffuser){ window.BiblioPartagee._diffuser(msg); }
+
+  let sent=0;
+  if(window.opener){ try{ window.opener.postMessage(msg,url||'*'); sent++; }catch(e){} }
+  if(window.parent!==window){ try{ window.parent.postMessage(msg,url||'*'); sent++; }catch(e){} }
+
+  try{
+    const ch=new BroadcastChannel('tossara_biblio_canal');
+    ch.postMessage({type:'maj',action:'push_complet',data,ts:Date.now()});
+    ch.close(); sent++;
+  }catch(e){}
+
+  setSyncStatus('ok');
+  toast(`Biblio poussée (${data.length} éléments, ${sent} canal(aux))`,'ok');
+}
+
+/* ========== EVENTS ========== */
+document.getElementById('btnConvert').addEventListener('click', async ()=>{
+  const btn=document.getElementById('btnConvert');
+  const orig=btn.innerHTML;
+  const num=+document.getElementById('selSurah').value;
+  const lang=document.getElementById('selLang').value;
+  const rec=document.getElementById('selReciter').value;
+  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Conversion…';
+  try{
+    const item=await convertSurah(num,lang,rec);
+    const existants=window.BiblioPartagee.lister();
+    const doublon=existants.some(x=>x.type==='coran'&&x.data&&x.data.surah===item.surah&&x.data.langEdition===item.langEdition&&x.data.reciter===item.reciter);
+    if(doublon){ toast('Cette version est déjà dans la biblio.','warn'); }
+    else {
+      await window.BiblioPartagee.ajouter({titre:`Sourate ${num} — ${item.name}`,type:'coran',sousType:'json',data:item});
+      renderBiblio(); renderStorage();
+      toast(`Sourate ${num} — ${item.name} ajoutée !`);
+    }
+  }catch(err){ toast(err.message,'err'); }
+  finally{ btn.disabled=false; btn.innerHTML=orig; }
+});
+
+const dz=document.getElementById('dropzone'), mi=document.getElementById('mediaInput');
+dz.addEventListener('click',()=>mi.click());
+mi.addEventListener('change',e=>{ if(e.target.files.length) handleFiles(e.target.files); e.target.value=''; });
+['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{ e.preventDefault(); dz.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
+dz.addEventListener('drop',e=>{ if(e.dataTransfer.files.length) handleFiles(e.dataTransfer.files); });
+
+document.getElementById('btnAddMedia').addEventListener('click', commitMedia);
+document.getElementById('btnClearMedia').addEventListener('click',()=>{ pendingMedia.forEach(m=>URL.revokeObjectURL(m.previewUrl)); pendingMedia=[]; renderPending(); });
+document.getElementById('btnExport').addEventListener('click', exportJSON);
+document.getElementById('btnImport').addEventListener('click',()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change',e=>{ if(e.target.files[0]) importJSON(e.target.files[0]); e.target.value=''; });
+document.getElementById('btnPushAgent').addEventListener('click', pushToAgent);
+document.getElementById('btnClear').addEventListener('click', async ()=>{
+  if(!window.BiblioPartagee.lister().length) return;
+  if(confirm('Vider toute la biblio ? Irréversible.')) {
+    await window.BiblioPartagee.vider(); renderBiblio(); renderStorage();
+    document.getElementById('panelPlayer').style.display='none';
+    toast('Biblio vidée','warn');
+  }
+});
+document.getElementById('btnSaveNow').addEventListener('click',()=>{ renderBiblio(); renderStorage(); window.BiblioPartagee.notifier(); setSyncStatus('ok'); toast('Biblio synchronisée'); });
+document.getElementById('btnReloadStorage').addEventListener('click',()=>{ renderBiblio(); renderStorage(); toast('Rechargé'); });
+document.getElementById('btnGuide').addEventListener('click',()=>document.getElementById('modalGuide').classList.add('open'));
+document.getElementById('btnCloseGuide').addEventListener('click',()=>document.getElementById('modalGuide').classList.remove('open'));
+document.getElementById('modalGuide').addEventListener('click',e=>{ if(e.target.id==='modalGuide') e.target.classList.remove('open'); });
+document.getElementById('btnClosePreview').addEventListener('click',()=>{ document.getElementById('modalPreview').classList.remove('open'); document.getElementById('previewBody').innerHTML=''; });
+document.getElementById('modalPreview').addEventListener('click',e=>{ if(e.target.id==='modalPreview'){ e.target.classList.remove('open'); document.getElementById('previewBody').innerHTML=''; } });
+
+window.addEventListener('biblio:maj',()=>{ renderBiblio(); renderStorage(); });
+
+window.addEventListener('message',e=>{
+  if(e.data&&e.data.type==='biblio:push'){ renderBiblio(); renderStorage(); toast('Biblio reçue de l\'agent','ok'); }
+});
+
+/* ========== INIT ========== */
+fillSurahSelect();
+renderBiblio();
+renderStorage();
+renderPending();
+setSyncStatus('ok');
+
+/* ========== PERSISTANCE DU STOCKAGE ========== */
+/* Demande au navigateur de ne pas purger IndexedDB automatiquement.
+   Ignoré silencieusement si non supporté ou refusé. */
+(function demanderPersistance(){
+  if(navigator.storage && navigator.storage.persist){
+    navigator.storage.persisted().then(deja => {
+      if(deja) return;
+      navigator.storage.persist().then(accordé => {
+        console.log('Stockage persistant :', accordé ? 'accordé ✅' : 'refusé (le navigateur pourra purger en cas de manque d\'espace)');
+      }).catch(()=>{});
+    }).catch(()=>{});
+  }
+})();
+</script>
+</body>
+</html>
